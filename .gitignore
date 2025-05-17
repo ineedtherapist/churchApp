@@ -1,2 +1,50 @@
-node_modules
-.idea
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Build output
+build/
+dist/
+
+# IDE and editor settings
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Coverage reports
+coverage/
+
+# React specific
+*.cache/
+*.env.local
+public/static/
+public/*.js
+public/*.map
+
+# Proxy setup
+setupProxy.js
+
+# Miscellaneous
+*.bak
+*.tmp
+*.temp
+*.log

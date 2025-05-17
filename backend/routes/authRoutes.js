@@ -84,34 +84,23 @@ router.post(
         return res.status(401).json({ message: 'Invalid credentials' });
       }
 
-      // Find password in passwd collection that either:
-      // 1. Belongs to this user (userId matches) and is active, or
-      // 2. Has no userId (for backward compatibility) and matches the password
+      // Find password in passwd collection that:
+      // 1. Belongs to this user (userId matches) and is active
       const passwdDoc = await Passwd.findOne({
-        $and: [
-          { passwd: password },
-          { 
-            $or: [
-              { userId: loginUser._id, isActive: true },
-              { userId: { $exists: false } },
-              { userId: null }
-            ]
-          }
-        ]
+        passwd: password,
+        userId: loginUser._id,
+        isActive: true
       });
 
       if (!passwdDoc) {
         return res.status(401).json({ message: 'Invalid credentials' });
       }
 
-      // Determine role (admin or user)
-      const role = username === 'admin' ? 'admin' : 'user';
-
       // Return JWT token
       res.json({
         _id: loginUser._id,
         username: loginUser.name,
-        role: role,
+        role: loginUser.name === 'admin' ? 'admin' : 'user',
         token: generateToken(loginUser._id)
       });
     } catch (error) {
@@ -120,30 +109,5 @@ router.post(
     }
   }
 );
-
-// Create admin user on server start
-router.get('/init-admin', async (req, res) => {
-  try {
-    // Check if admin exists in login collection
-    const adminLogin = await Login.findOne({ name: 'admin' });
-
-    if (!adminLogin) {
-      // Create admin in login collection
-      const newAdmin = await Login.create({ name: 'admin' });
-      // Create admin in passwd collection with reference to the admin user
-      await Passwd.create({ 
-        passwd: 'admin',
-        userId: newAdmin._id,
-        isActive: true
-      });
-      console.log('Admin user created');
-    }
-
-    res.json({ message: 'Admin user initialized' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
 
 module.exports = router;

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Login from './components/auth/Login';
-import Register from './components/auth/Register';
-import Home from './components/Home';
-import AdminPanel from './components/admin/AdminPanel';
-import { useAuth } from './context/AuthContext';
+import Login from './components/auth/Login.jsx';
+import Register from './components/auth/Register.jsx';
+import Home from './components/Home.jsx';
+import AdminPanel from './components/admin/AdminPanel.jsx';
+import { useAuth } from './context/AuthContext.jsx';
 
 function App() {
   return (

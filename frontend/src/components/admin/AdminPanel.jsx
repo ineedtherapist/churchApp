@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useAuth } from '../../context/AuthContext';
-import UserList from './UserList';
-import UserForm from './UserForm';
+import { useAuth } from '../../context/AuthContext.jsx';
+import UserList from './UserList.jsx';
+import UserForm from './UserForm.jsx';
 
 const AdminPanel = () => {
   const { user, logout } = useAuth();

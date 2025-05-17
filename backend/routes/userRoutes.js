@@ -181,24 +181,18 @@ router.put(
 
       // Update password if provided
       if (req.body.password) {
-        // Find existing active passwords for this user and mark them as still active
-        // (we don't deactivate old passwords to allow both old and new passwords to work)
+        // Деактивувати всі попередні активні паролі цього користувача
+        await Passwd.updateMany(
+          { userId: login._id, isActive: true },
+          { $set: { isActive: false } }
+        );
 
-        // Check if this exact password already exists for this user
-        let existingUserPassword = await Passwd.findOne({ 
+        // Створити новий активний пароль
+        await Passwd.create({ 
           passwd: req.body.password,
-          userId: login._id
+          userId: login._id,
+          isActive: true
         });
-
-        // If this exact password doesn't exist for this user, create it
-        if (!existingUserPassword) {
-          // Create a new password entry for this user
-          await Passwd.create({ 
-            passwd: req.body.password,
-            userId: login._id,
-            isActive: true
-          });
-        }
       }
 
       res.json({
@@ -250,3 +244,4 @@ router.delete('/:id', protect, admin, async (req, res) => {
 });
 
 module.exports = router;
+
