@@ -8,6 +8,7 @@ import {
 } from '../styles/sharedStyles';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
+import WishBox from './WishBox.jsx';
 
 const holidays = [
   {
@@ -264,6 +265,9 @@ const Holidays = () => {
         </div>
       </section>
 
+      {/* WishBox (скринька побажань) */}
+      <WishBox />
+
       {/* Footer site */}
       <footer style={{
         background: gold,
@@ -280,3 +284,4 @@ const Holidays = () => {
 };
 
 export default Holidays;
+

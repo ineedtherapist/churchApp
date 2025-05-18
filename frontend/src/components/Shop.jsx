@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Header from './Header.jsx';
+import WishBox from './WishBox.jsx';
 import {
   gold,
   darkGold,
@@ -368,6 +369,8 @@ const Shop = () => {
           )}
         </div>
       </div>
+      {/* WishBox (скринька побажань) */}
+      <WishBox />
       {/* Footer */}
       <footer style={{
         background: gold,

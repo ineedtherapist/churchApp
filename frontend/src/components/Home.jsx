@@ -8,6 +8,7 @@ import {
   white,
   hoverPurple
 } from '../styles/sharedStyles';
+import WishBox from './WishBox.jsx';
 
 // Імпорт локальних зображень
 import image1 from '../assets/images/1image.jpg';
@@ -564,6 +565,9 @@ const Home = () => {
           ))}
         </div>
       </section>
+
+      {/* WishBox (скринька побажань) */}
+      <WishBox />
 
       {/* Footer site */}
       <footer style={{
