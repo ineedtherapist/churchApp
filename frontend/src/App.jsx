@@ -5,6 +5,7 @@ import Register from './components/auth/Register.jsx';
 import Home from './components/Home.jsx';
 import AdminPanel from './components/admin/AdminPanel.jsx';
 import Holidays from './components/Holidays.jsx';
+import Shop from './components/Shop.jsx';
 import { useAuth } from './context/AuthContext.jsx';
 
 function App() {
@@ -26,6 +27,14 @@ function App() {
                     element={
                         <ProtectedRoute>
                             <Holidays />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/shop"
+                    element={
+                        <ProtectedRoute>
+                            <Shop />
                         </ProtectedRoute>
                     }
                 />

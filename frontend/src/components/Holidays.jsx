@@ -1,12 +1,13 @@
 import React from 'react';
+import Header from './Header.jsx';
+import {
+  gold,
+  darkGold,
+  white,
+  hoverPurple
+} from '../styles/sharedStyles';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext.jsx'; // додано
-
-// Кольори та стилі як у Home.jsx
-const gold = '#ffd42e';
-const darkGold = '#c9a43a';
-const white = '#fff';
-const hoverPurple = '#9d4edd';
+import { useAuth } from '../context/AuthContext.jsx';
 
 const holidays = [
   {
@@ -59,7 +60,7 @@ const socials = [
 
 const Holidays = () => {
   const navigate = useNavigate();
-  const { logout } = useAuth(); // додано
+  const { logout } = useAuth();
 
   // Для анімації появи
   const [visible, setVisible] = React.useState(false);
@@ -75,185 +76,7 @@ const Holidays = () => {
 
   return (
     <div style={{ background: white, minHeight: '100vh', position: 'relative' }}>
-      {/* Header */}
-      <header style={{
-        background: gold,
-        color: white,
-        padding: '14px 0',
-        marginBottom: 0,
-        borderBottom: `2px solid ${gold}`,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        boxShadow: '0 4px 16px rgba(157, 78, 221, 0.10)',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        {/* Декоративний градієнт */}
-        <div style={{
-          position: 'absolute',
-          left: 0,
-          top: 0,
-          width: '100%',
-          height: '100%',
-          background: 'linear-gradient(90deg, rgba(255,255,255,0.10) 0%, rgba(157,78,221,0.10) 100%)',
-          pointerEvents: 'none',
-          zIndex: 0
-        }} />
-        {/* Логотип-іконка та напис */}
-        <div style={{ display: 'flex', alignItems: 'center', zIndex: 1 }}>
-          <span style={{
-            fontSize: 32,
-            marginLeft: 18,
-            marginRight: 8,
-            userSelect: 'none'
-          }}>⛪</span>
-          <h1
-            style={{
-              margin: 0,
-              fontSize: '1.1rem',
-              letterSpacing: '2px',
-              color: white,
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              cursor: 'pointer'
-            }}
-            onClick={() => navigate('/')}
-          >
-            Your Online Church
-          </h1>
-        </div>
-        <nav style={{ marginRight: 32, display: 'flex', gap: 24, alignItems: 'center', zIndex: 1 }}>
-          <button
-            onClick={() => navigate('/')}
-            style={{
-              color: darkGold,
-              background: white,
-              textDecoration: 'none',
-              fontWeight: 'bold',
-              fontSize: '1.05rem',
-              padding: '7px 14px',
-              borderRadius: 6,
-              border: 'none',
-              transition: 'background 0.2s, color 0.2s, border 0.2s',
-              display: 'flex',
-              alignItems: 'center'
-            }}
-            onMouseOver={e => {
-              e.currentTarget.style.background = hoverPurple;
-              e.currentTarget.style.color = white;
-              e.currentTarget.style.border = 'none';
-            }}
-            onMouseOut={e => {
-              e.currentTarget.style.background = white;
-              e.currentTarget.style.color = darkGold;
-              e.currentTarget.style.border = 'none';
-            }}
-          >
-            <span role="img" aria-label="home" style={{ marginRight: 6, background: 'none', transition: 'color 0.2s' }}>🏠</span>
-            Home
-          </button>
-          <button
-            onClick={() => navigate('/shop')}
-            style={{
-              color: darkGold,
-              background: white,
-              textDecoration: 'none',
-              fontWeight: 'bold',
-              fontSize: '1.05rem',
-              padding: '7px 14px',
-              borderRadius: 6,
-              border: 'none',
-              transition: 'background 0.2s, color 0.2s, border 0.2s',
-              display: 'flex',
-              alignItems: 'center'
-            }}
-            onMouseOver={e => {
-              e.currentTarget.style.background = hoverPurple;
-              e.currentTarget.style.color = white;
-              e.currentTarget.style.border = 'none';
-            }}
-            onMouseOut={e => {
-              e.currentTarget.style.background = white;
-              e.currentTarget.style.color = darkGold;
-              e.currentTarget.style.border = 'none';
-            }}
-          >
-            <span role="img" aria-label="shop" style={{ marginRight: 6, background: 'none', transition: 'color 0.2s' }}>🛒</span>
-            Church Shop
-          </button>
-          <button
-            onClick={() => navigate('/services')}
-            style={{
-              color: darkGold,
-              background: white,
-              textDecoration: 'none',
-              fontWeight: 'bold',
-              fontSize: '1.05rem',
-              padding: '7px 14px',
-              borderRadius: 6,
-              border: 'none',
-              transition: 'background 0.2s, color 0.2s, border 0.2s',
-              display: 'flex',
-              alignItems: 'center'
-            }}
-            onMouseOver={e => {
-              e.currentTarget.style.background = hoverPurple;
-              e.currentTarget.style.color = white;
-              e.currentTarget.style.border = 'none';
-            }}
-            onMouseOut={e => {
-              e.currentTarget.style.background = white;
-              e.currentTarget.style.color = darkGold;
-              e.currentTarget.style.border = 'none';
-            }}
-          >
-            <span role="img" aria-label="services" style={{ marginRight: 6, background: 'none', transition: 'color 0.2s' }}>🛐</span>
-            Services
-          </button>
-          <button
-            onClick={handleLogout}
-            style={{
-              marginLeft: 24,
-              color: white,
-              background: '#ef233c',
-              fontWeight: 'bold',
-              fontSize: '1.05rem',
-              padding: '7px 18px',
-              borderRadius: 6,
-              border: 'none',
-              cursor: 'pointer',
-              transition: 'background 0.2s, color 0.2s, border 0.2s',
-              display: 'flex',
-              alignItems: 'center'
-            }}
-            onMouseOver={e => {
-              e.currentTarget.style.background = '#c3001b';
-              e.currentTarget.style.color = white;
-              e.currentTarget.style.border = 'none';
-            }}
-            onMouseOut={e => {
-              e.currentTarget.style.background = '#ef233c';
-              e.currentTarget.style.color = white;
-              e.currentTarget.style.border = 'none';
-            }}
-          >
-            Logout
-          </button>
-        </nav>
-        {/* Декоративний роздільник */}
-        <div style={{
-          position: 'absolute',
-          right: 180,
-          top: '20%',
-          height: '60%',
-          width: 2,
-          background: 'rgba(255,255,255,0.18)',
-          borderRadius: 2,
-          zIndex: 0
-        }} />
-      </header>
-
+      <Header />
       {/* SVG Wave Decoration */}
       <div style={{
         width: '100vw',
@@ -457,4 +280,3 @@ const Holidays = () => {
 };
 
 export default Holidays;
-
