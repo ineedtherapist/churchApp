@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext.jsx';
 import UserList from './UserList.jsx';
@@ -19,8 +19,8 @@ const AdminPanel = () => {
       <div className="admin-header">
         <h1>Admin Panel</h1>
         <div className="admin-nav">
-          <Link to="/admin" className="btn">Users</Link>
-          <Link to="/" className="btn">Home</Link>
+          {/* <Link to="/admin" className="btn">Users</Link>
+          <Link to="/" className="btn">Home</Link> */}
           <button onClick={handleLogout} className="btn btn-danger">Logout</button>
         </div>
       </div>

@@ -60,10 +60,45 @@ const white = '#fff';
 const hoverPurple = '#9d4edd';
 const headerPurple = '#9d4edd'; // фіолетовий для хедера
 
+const reviews = [
+  {
+    name: "Anna P.",
+    text: "This church has become my second family. The community is so warm and welcoming!"
+  },
+  {
+    name: "Oleh S.",
+    text: "I love the youth programs and the inspiring sermons every Sunday."
+  },
+  {
+    name: "Maria K.",
+    text: "A place where I found peace, support, and true friends."
+  }
+];
+
+const socials = [
+  { icon: "📘", label: "Facebook", url: "https://facebook.com/yourchurch" },
+  { icon: "📸", label: "Instagram", url: "https://instagram.com/yourchurch" },
+  { icon: "✉️", label: "Email", url: "mailto:info@yourchurch.example.com" }
+];
+
+const scrollToSection = (id) => {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+};
+
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
   const { logout } = useAuth(); // отримати logout з контексту
+
+  // Для анімації появи
+  const [sliderVisible, setSliderVisible] = useState(false);
+  const [descVisible, setDescVisible] = useState(false);
+
+  React.useEffect(() => {
+    setTimeout(() => setSliderVisible(true), 100);
+    setTimeout(() => setDescVisible(true), 400);
+  }, []);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % newsEvents.length);
@@ -79,13 +114,13 @@ const Home = () => {
   };
 
   return (
-    <div style={{ background: white, minHeight: '100vh' }}>
+    <div style={{ background: white, minHeight: '100vh', position: 'relative' }}>
       {/* Header */}
       <header style={{
         background: gold,
         color: white,
         padding: '14px 0',
-        marginBottom: '24px',
+        marginBottom: 0, // прибрано відступ під хедером
         borderBottom: `2px solid ${gold}`,
         display: 'flex',
         alignItems: 'center',
@@ -125,8 +160,8 @@ const Home = () => {
           </h1>
         </div>
         <nav style={{ marginRight: 32, display: 'flex', gap: 24, alignItems: 'center', zIndex: 1 }}>
-          <Link
-            to="/shop"
+          <button
+            onClick={() => scrollToSection('shop-section')}
             style={{
               color: darkGold,
               background: white,
@@ -153,9 +188,9 @@ const Home = () => {
           >
             <span role="img" aria-label="shop" style={{ marginRight: 6, background: 'none', transition: 'color 0.2s' }}>🛒</span>
             Church Shop
-          </Link>
-          <Link
-            to="/calendar"
+          </button>
+          <button
+            onClick={() => navigate('/holidays')}
             style={{
               color: darkGold,
               background: white,
@@ -182,9 +217,9 @@ const Home = () => {
           >
             <span role="img" aria-label="calendar" style={{ marginRight: 6, background: 'none', transition: 'color 0.2s' }}>📅</span>
             Holiday Calendar
-          </Link>
-          <Link
-            to="/services"
+          </button>
+          <button
+            onClick={() => scrollToSection('services-section')}
             style={{
               color: darkGold,
               background: white,
@@ -213,7 +248,7 @@ const Home = () => {
           >
             <span role="img" aria-label="services" style={{ marginRight: 6, background: 'none', transition: 'color 0.2s' }}>🛐</span>
             Services
-          </Link>
+          </button>
           <button
             onClick={handleLogout}
             style={{
@@ -257,8 +292,59 @@ const Home = () => {
         }} />
       </header>
 
+      {/* SVG Wave Decoration */}
+      <div style={{
+        width: '100vw',
+        position: 'relative',
+        left: '50%',
+        right: '50%',
+        marginLeft: '-50vw',
+        marginRight: '-50vw',
+        overflow: 'hidden',
+        lineHeight: 0,
+        padding: 0
+      }}>
+        <svg
+          viewBox={`0 0 ${window.innerWidth} 60`}
+          width="100%"
+          height="60"
+          preserveAspectRatio="none"
+          style={{ display: 'block' }}
+        >
+          <path
+            fill={hoverPurple}
+            fillOpacity="0.08"
+            d={`
+              M0,32
+              L${window.innerWidth * 0.033},37.3
+              C${window.innerWidth * 0.066},43,${window.innerWidth * 0.133},53,${window.innerWidth * 0.2},58.7
+              C${window.innerWidth * 0.266},64,${window.innerWidth * 0.333},64,${window.innerWidth * 0.4},53.3
+              C${window.innerWidth * 0.466},43,${window.innerWidth * 0.533},21,${window.innerWidth * 0.6},16
+              C${window.innerWidth * 0.666},11,${window.innerWidth * 0.733},21,${window.innerWidth * 0.8},32
+              C${window.innerWidth * 0.866},43,${window.innerWidth * 0.933},53,${window.innerWidth * 0.966},58.7
+              L${window.innerWidth},64
+              L${window.innerWidth},0
+              L${window.innerWidth * 0.966},0
+              C${window.innerWidth * 0.933},0,${window.innerWidth * 0.866},0,${window.innerWidth * 0.8},0
+              C${window.innerWidth * 0.733},0,${window.innerWidth * 0.666},0,${window.innerWidth * 0.6},0
+              C${window.innerWidth * 0.533},0,${window.innerWidth * 0.466},0,${window.innerWidth * 0.4},0
+              C${window.innerWidth * 0.333},0,${window.innerWidth * 0.266},0,${window.innerWidth * 0.2},0
+              C${window.innerWidth * 0.133},0,${window.innerWidth * 0.066},0,${window.innerWidth * 0.033},0
+              L0,0Z
+            `}
+          ></path>
+        </svg>
+      </div>
+      {/* Додаємо відступ після хвильки */}
+      <div style={{ height: 24 }} />
+
       {/* News & Events Slider */}
-      <section style={{ width: '100vw', maxWidth: '100%', margin: '0 auto 40px auto', textAlign: 'center' }}>
+      <section id="slider-section" style={{
+        width: '100vw', maxWidth: '100%', margin: '0 auto 40px auto', textAlign: 'center',
+        opacity: sliderVisible ? 1 : 0,
+        transform: sliderVisible ? 'translateY(0)' : 'translateY(40px)',
+        transition: 'opacity 0.7s, transform 0.7s'
+      }}>
         <div style={{
           position: 'relative',
           background: white,
@@ -422,20 +508,36 @@ const Home = () => {
         display: 'flex',
         gap: 24,
         justifyContent: 'center',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        opacity: descVisible ? 1 : 0,
+        transform: descVisible ? 'translateY(0)' : 'translateY(40px)',
+        transition: 'opacity 0.7s, transform 0.7s'
       }}>
         {churchDescription.map((desc, idx) => (
-          <div key={idx} style={{
-            background: white,
-            border: `1.5px solid ${gold}`,
-            borderRadius: 12,
-            boxShadow: `0 2px 8px rgba(218,165,32,0.08)`,
-            padding: 24,
-            flex: '1 1 250px',
-            minWidth: 250,
-            maxWidth: 300,
-            textAlign: 'center'
-          }}>
+          <div
+            key={idx}
+            style={{
+              background: white,
+              border: `1.5px solid ${gold}`,
+              borderRadius: 12,
+              boxShadow: `0 2px 8px rgba(218,165,32,0.08)`,
+              padding: 24,
+              flex: '1 1 250px',
+              minWidth: 250,
+              maxWidth: 300,
+              textAlign: 'center',
+              transition: 'box-shadow 0.3s, transform 0.3s',
+              cursor: 'pointer'
+            }}
+            onMouseOver={e => {
+              e.currentTarget.style.boxShadow = `0 8px 24px ${hoverPurple}22`;
+              e.currentTarget.style.transform = 'translateY(-6px) scale(1.03)';
+            }}
+            onMouseOut={e => {
+              e.currentTarget.style.boxShadow = `0 2px 8px rgba(218,165,32,0.08)`;
+              e.currentTarget.style.transform = 'none';
+            }}
+          >
             <div style={{ fontSize: 36, marginBottom: 12 }}>{desc.icon}</div>
             <h4 style={{ color: gold, marginBottom: 8 }}>{desc.title}</h4>
             <p style={{ color: '#444', fontSize: '1rem' }}>{desc.text}</p>
@@ -443,60 +545,202 @@ const Home = () => {
         ))}
       </section>
 
+      {/* Banner Join Us */}
+      <section style={{
+        background: `${hoverPurple}11`,
+        border: `1.5px solid ${hoverPurple}`,
+        borderRadius: 16,
+        maxWidth: 700,
+        margin: '0 auto 48px auto',
+        padding: '32px 24px',
+        textAlign: 'center',
+        boxShadow: `0 2px 12px ${hoverPurple}11`
+      }}>
+        <h3 style={{ color: hoverPurple, fontSize: '1.5rem', marginBottom: 12 }}>Become Part of Our Family!</h3>
+        <p style={{ color: '#444', fontSize: '1.08rem', marginBottom: 18 }}>
+          We invite you to join our vibrant community, participate in events, and grow in faith together.
+        </p>
+        <button
+          style={{
+            background: gold,
+            color: white,
+            border: 'none',
+            borderRadius: 8,
+            padding: '10px 32px',
+            fontWeight: 'bold',
+            fontSize: '1.08rem',
+            cursor: 'pointer',
+            boxShadow: `0 2px 8px ${gold}33`,
+            transition: 'background 0.2s'
+          }}
+          onMouseOver={e => e.currentTarget.style.background = hoverPurple}
+          onMouseOut={e => e.currentTarget.style.background = gold}
+          onClick={() => scrollToSection('contacts-section')}
+        >
+          Join Us
+        </button>
+      </section>
+
+      {/* Reviews */}
+      <section style={{
+        maxWidth: 900,
+        margin: '0 auto 48px auto',
+        padding: '0 12px'
+      }}>
+        <h3 style={{ color: gold, marginBottom: 18, textAlign: 'center', fontSize: '1.4rem' }}>What Our Members Say</h3>
+        <div style={{
+          display: 'flex',
+          gap: 24,
+          justifyContent: 'center',
+          flexWrap: 'wrap'
+        }}>
+          {reviews.map((review, idx) => (
+            <div key={idx} style={{
+              background: white,
+              border: `1.5px solid ${hoverPurple}`,
+              borderRadius: 12,
+              boxShadow: `0 2px 8px ${hoverPurple}11`,
+              padding: 20,
+              flex: '1 1 220px',
+              minWidth: 220,
+              maxWidth: 300,
+              textAlign: 'center',
+              fontStyle: 'italic'
+            }}>
+              <p style={{ color: '#444', marginBottom: 10 }}>"{review.text}"</p>
+              <div style={{ color: hoverPurple, fontWeight: 700 }}>{review.name}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Working Hours */}
       <footer style={{
         background: white,
-        borderTop: `2px solid ${gold}`,
-        padding: '40px 0 48px 0',
-        marginTop: 40,
-        textAlign: 'center'
+        color: '#222', // чорний колір тексту
+        textAlign: 'center',
+        padding: '32px 0 24px 0',
+        marginTop: 40
       }}>
-        <h2 style={{ color: gold, marginBottom: 24, fontSize: '2rem', letterSpacing: '1px' }}>Church Working Hours</h2>
+        <h2 style={{
+          color: gold,
+          marginBottom: 18,
+          fontSize: '1.7rem',
+          letterSpacing: '1.2px',
+          fontWeight: 700
+        }}>
+          Church Working Hours
+        </h2>
         <div style={{
           display: 'inline-block',
-          background: '#faf6ef',
-          border: `2px solid ${gold}`,
-          borderRadius: 16,
-          boxShadow: `0 4px 16px rgba(201,164,58,0.08)`,
-          padding: '28px 48px 20px 48px',
-          marginBottom: 16,
-          minWidth: 320
+          background: '#fff',
+          border: `1.5px solid ${gold}`,
+          borderRadius: 12,
+          boxShadow: `0 2px 8px rgba(218,165,32,0.08)`,
+          padding: '24px 36px 18px 36px',
+          marginBottom: 10,
+          minWidth: 260
         }}>
           <table style={{
-            margin: '0 auto',
-            fontSize: '1.15rem',
+            margin: '0 auto 12px auto',
+            fontSize: '1.08rem',
             borderCollapse: 'separate',
-            borderSpacing: '0 8px'
+            borderSpacing: '0 6px',
+            fontFamily: 'inherit',
+            background: 'white'
           }}>
             <tbody>
               {workingHours.map(({ day, hours }) => (
                 <tr key={day}>
                   <td style={{
-                    padding: '6px 24px 6px 0',
+                    padding: '4px 24px 4px 0',
                     fontWeight: 'bold',
                     color: gold,
                     textAlign: 'right',
-                    fontSize: '1.08em',
-                    letterSpacing: '0.5px'
+                    fontSize: '1em',
+                    letterSpacing: '0.5px',
+                    borderBottom: 'none'
                   }}>{day}</td>
                   <td style={{
-                    padding: '6px 0 6px 24px',
-                    color: '#444',
+                    padding: '4px 0 4px 24px',
+                    color: '#222', // чорний колір тексту
                     background: '#fff',
                     borderRadius: 8,
-                    minWidth: 120,
-                    fontWeight: day === 'Sunday' ? 'bold' : 'normal',
-                    border: day === 'Sunday' ? `1.5px solid ${gold}` : 'none'
+                    minWidth: 110,
+                    fontWeight: 'normal',
+                    border: 'none',
+                    boxShadow: 'none',
+                    fontSize: '1em',
+                    letterSpacing: '0.3px'
                   }}>{hours}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+          <p style={{
+            marginTop: 10,
+            marginBottom: 0,
+            color: '#888',
+            fontSize: '1.05rem',
+            background: '#f8f6ff',
+            display: 'inline-block',
+            padding: '7px 18px',
+            borderRadius: 8,
+            boxShadow: `0 1px 4px ${hoverPurple}09`
+          }}>
+            <span role="img" aria-label="church">⛪</span> We welcome you to visit us during our working hours!
+          </p>
         </div>
-        <p style={{ marginTop: 24, marginBottom: 24, color: '#888', fontSize: '1.08rem' }}>
-          <span role="img" aria-label="church">⛪</span> We welcome you to visit us during our working hours!
-        </p>
       </footer>
+
+      {/* Contacts & Socials */}
+      <section id="contacts-section" style={{
+        maxWidth: 900,
+        margin: '0 auto 48px auto',
+        padding: '0 12px',
+        textAlign: 'center'
+      }}>
+        <h3 style={{ color: gold, marginBottom: 18, fontSize: '1.4rem' }}>Contact Us</h3>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 32,
+          flexWrap: 'wrap',
+          marginBottom: 18
+        }}>
+          <div>
+            <div style={{ color: hoverPurple, fontWeight: 700, fontSize: '1.1rem' }}>Address</div>
+            <div style={{ color: '#444' }}>123 Church St, Kyiv, Ukraine</div>
+          </div>
+          <div>
+            <div style={{ color: hoverPurple, fontWeight: 700, fontSize: '1.1rem' }}>Phone</div>
+            <div style={{ color: '#444' }}>+380 44 123 4567</div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 18 }}>
+          {socials.map(s => (
+            <a
+              key={s.label}
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: hoverPurple,
+                fontSize: 28,
+                margin: '0 6px',
+                textDecoration: 'none',
+                transition: 'color 0.2s'
+              }}
+              onMouseOver={e => e.currentTarget.style.color = gold}
+              onMouseOut={e => e.currentTarget.style.color = hoverPurple}
+              aria-label={s.label}
+            >
+              {s.icon}
+            </a>
+          ))}
+        </div>
+      </section>
+
       {/* Footer site */}
       <footer style={{
         background: gold,

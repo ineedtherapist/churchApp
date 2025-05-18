@@ -4,64 +4,78 @@ import Login from './components/auth/Login.jsx';
 import Register from './components/auth/Register.jsx';
 import Home from './components/Home.jsx';
 import AdminPanel from './components/admin/AdminPanel.jsx';
+import Holidays from './components/Holidays.jsx';
 import { useAuth } from './context/AuthContext.jsx';
 
 function App() {
-  return (
-    <div className="App">
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/*"
-          element={
-            <AdminRoute>
-              <AdminPanel />
-            </AdminRoute>
-          }
-        />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </div>
-  );
+    return (
+        <div className="App">
+            <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route
+                    path="/"
+                    element={
+                        <ProtectedRoute>
+                            <Home />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/holidays"
+                    element={
+                        <ProtectedRoute>
+                            <Holidays />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/admin/*"
+                    element={
+                        <AdminRoute>
+                            <AdminPanel />
+                        </AdminRoute>
+                    }
+                />
+                <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+        </div>
+    );
 }
 
 // Protected route component
 function ProtectedRoute({ children }) {
-  const { isAuthenticated, loading } = useAuth();
+    const { isAuthenticated, user, loading } = useAuth();
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
+    if (!isAuthenticated) {
+        return <Navigate to="/login" replace />;
+    }
 
-  return children;
+    // Redirect admin users to the admin panel
+    if (user?.role === 'admin') {
+        return <Navigate to="/admin" replace />;
+    }
+
+    return children;
 }
 
 // Admin route component
 function AdminRoute({ children }) {
-  const { isAuthenticated, user, loading } = useAuth();
+    const { isAuthenticated, user, loading } = useAuth();
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
-  if (!isAuthenticated || user?.role !== 'admin') {
-    return <Navigate to="/" replace />;
-  }
+    if (!isAuthenticated || user?.role !== 'admin') {
+        return <Navigate to="/" replace />;
+    }
 
-  return children;
+    return children;
 }
 
 export default App;
