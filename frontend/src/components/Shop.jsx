@@ -8,115 +8,129 @@ import {
   hoverPurple
 } from '../styles/sharedStyles';
 
-// 15 товарів: 5 ікон, 5 одягу, 5 свічки/ладан/інше
+// Import images
+import BibleNotebook from '../assets/images/BibleNotebook.jpg';
+import ChildrensTshirt from '../assets/images/Children\'sT-shirt.jpg';
+import ChurchCandleSet from '../assets/images/ChurchCandleSet.jpg';
+import ChurchHat from '../assets/images/churchhat.jpg';
+import ChurchHoodie from '../assets/images/churchhoodie.jpg';
+import ChurchMug from '../assets/images/ChurchMug.jpg';
+import FaithTshirt from '../assets/images/faitht-shirt.jpg';
+import GuardianAngelIcon from '../assets/images/guardianangelicon.jpg';
+import HolyTrinityIcon from '../assets/images/holytrinityicon.jpg';
+import IncensePack from '../assets/images/IncensePack.jpg';
+import JesusIcon from '../assets/images/jesusicon.jpg';
+import PrayerShawl from '../assets/images/PrayerShawl.jpg';
+import RosaryBeads from '../assets/images/RosaryBeads.jpg';
+import StNicholasIcon from '../assets/images/stnicholasicon.jpg';
+import VirginMaryIcon from '../assets/images/virginmaryicon.jpg';
+
+// Update products array to use imported images
 const products = [
-  // Ікони
   {
     id: 1,
     name: 'Icon of Jesus Christ',
     description: 'Hand-painted icon of Jesus Christ. Blessed in our church.',
     price: 1200,
-    image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80'
+    image: JesusIcon
   },
   {
     id: 2,
     name: 'Icon of Virgin Mary',
     description: 'Beautiful icon of the Virgin Mary. A symbol of hope and love.',
     price: 1100,
-    image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80'
+    image: VirginMaryIcon
   },
   {
     id: 3,
     name: 'Saint Nicholas Icon',
     description: 'Small icon of Saint Nicholas, patron of travelers and children.',
     price: 950,
-    image: 'https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=400&q=80'
+    image: StNicholasIcon
   },
   {
     id: 4,
     name: 'Guardian Angel Icon',
     description: 'Icon for home protection and blessing.',
     price: 850,
-    image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80'
+    image: GuardianAngelIcon
   },
   {
     id: 5,
     name: 'Holy Trinity Icon',
     description: 'Traditional icon of the Holy Trinity. Perfect for prayer corner.',
     price: 1300,
-    image: 'https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?auto=format&fit=crop&w=400&q=80'
+    image: HolyTrinityIcon
   },
-  // Одяг
   {
     id: 6,
     name: 'Faith T-shirt',
     description: 'Comfortable cotton T-shirt with inspirational print.',
     price: 250,
-    image: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80'
+    image: FaithTshirt
   },
   {
     id: 7,
     name: 'Church Hoodie',
     description: 'Warm hoodie with church logo. Unisex, all sizes.',
     price: 480,
-    image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80'
+    image: ChurchHoodie
   },
   {
     id: 8,
     name: 'Christian Cap',
     description: 'Stylish cap with cross embroidery.',
     price: 180,
-    image: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80'
+    image: ChurchHat
   },
   {
     id: 9,
     name: 'Prayer Shawl',
     description: 'Lightweight shawl for prayer and church visits.',
     price: 220,
-    image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80'
+    image: PrayerShawl
   },
   {
     id: 10,
     name: 'Children\'s T-shirt',
     description: 'Soft T-shirt for kids with a joyful Christian message.',
     price: 160,
-    image: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=400&q=80'
+    image: ChildrensTshirt
   },
-  // Свічки, ладан, інше
   {
     id: 11,
     name: 'Church Candle Set',
     description: 'Set of 10 beeswax candles for home prayer.',
     price: 70,
-    image: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=400&q=80'
+    image: ChurchCandleSet
   },
   {
     id: 12,
     name: 'Incense Pack',
     description: 'Natural incense for spiritual atmosphere.',
     price: 60,
-    image: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80'
+    image: IncensePack
   },
   {
     id: 13,
     name: 'Bible Notebook',
     description: 'A5 notebook for your notes and prayers.',
     price: 90,
-    image: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80'
+    image: BibleNotebook
   },
   {
     id: 14,
     name: 'Rosary Beads',
     description: 'Wooden rosary beads for daily prayer.',
     price: 110,
-    image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80'
+    image: RosaryBeads
   },
   {
     id: 15,
     name: 'Church Mug',
     description: 'Ceramic mug with church logo. Perfect for your morning coffee.',
     price: 120,
-    image: 'https://images.unsplash.com/photo-1517685352821-92cf88aee5a5?auto=format&fit=crop&w=400&q=80'
+    image: ChurchMug
   }
 ];
 
