@@ -10,6 +10,18 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import WishBox from './WishBox.jsx';
 
+// Додаємо іконки до свят
+const holidayIcons = [
+  "🕊️", // Annunciation
+  "🌿", // Palm Sunday
+  "✝️", // Easter
+  "🔺", // Trinity Sunday
+  "🌟", // Transfiguration
+  "🌸", // Dormition
+  "👶", // Nativity of the Blessed Virgin Mary
+  "🎄"  // Christmas
+];
+
 const holidays = [
   {
     date: '2024-04-07',
@@ -69,9 +81,12 @@ const Holidays = () => {
     setTimeout(() => setVisible(true), 100);
   }, []);
 
+  // Tooltip для іконок свят
+  const [tooltip, setTooltip] = React.useState({ show: false, text: '', x: 0, y: 0 });
+
   // Логаут (коректно скидає авторизацію)
   const handleLogout = () => {
-    logout(); // тепер коректно скидає авторизацію
+    logout();
     navigate('/login');
   };
 
@@ -131,14 +146,25 @@ const Holidays = () => {
         textAlign: 'center',
         opacity: visible ? 1 : 0,
         transform: visible ? 'translateY(0)' : 'translateY(40px)',
-        transition: 'opacity 0.7s, transform 0.7s'
+        transition: 'opacity 0.7s, transform 0.7s',
+        background: 'linear-gradient(120deg, #f8f8ff 0%, #fffbe6 100%)',
+        paddingBottom: 32
       }}>
+        {/* Декоративна хвилька під заголовком */}
+        <div style={{
+          width: 80,
+          height: 4,
+          background: hoverPurple,
+          borderRadius: 2,
+          margin: '0 auto 18px auto',
+          opacity: 0.18
+        }} />
         <div style={{
           position: 'relative',
           background: white,
-          borderRadius: '12px',
-          boxShadow: `0 2px 8px rgba(218,165,32,0.12)`,
-          padding: '24px',
+          borderRadius: '16px',
+          boxShadow: `0 2px 12px ${hoverPurple}11`,
+          padding: '32px 24px 24px 24px',
           minHeight: 400,
           border: `1.5px solid ${gold}`,
           width: '90vw',
@@ -154,17 +180,49 @@ const Holidays = () => {
           }}>
             Church Holiday Calendar 2024
           </h2>
+          {/* Коротка історія свят */}
+          <div style={{
+            color: hoverPurple,
+            fontWeight: 500,
+            fontSize: '1.08rem',
+            marginBottom: 24,
+            letterSpacing: '.5px'
+          }}>
+            The most important Orthodox holidays of the year. Each celebration is filled with deep meaning and tradition.
+          </div>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
             {holidays.map((event, idx) => (
-              <li key={idx} style={{
-                marginBottom: 28,
-                paddingBottom: 18,
-                borderBottom: idx !== holidays.length - 1 ? `1px solid ${gold}33` : 'none',
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: 18,
-                justifyContent: 'flex-start'
-              }}>
+              <li
+                key={idx}
+                style={{
+                  marginBottom: 28,
+                  paddingBottom: 18,
+                  borderBottom: idx !== holidays.length - 1 ? `1px solid ${gold}33` : 'none',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: 18,
+                  justifyContent: 'flex-start',
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? 'translateY(0)' : 'translateY(32px)',
+                  transition: `opacity 0.7s ${idx * 0.07}s, transform 0.7s ${idx * 0.07}s`
+                }}
+              >
+                {/* Іконка свята з tooltip */}
+                <span
+                  style={{
+                    fontSize: 32,
+                    marginRight: 8,
+                    cursor: 'pointer',
+                    userSelect: 'none',
+                    transition: 'transform 0.2s'
+                  }}
+                  onMouseOver={e => setTooltip({ show: true, text: event.title, x: e.clientX, y: e.clientY })}
+                  onMouseOut={() => setTooltip({ show: false, text: '', x: 0, y: 0 })}
+                  aria-label={event.title}
+                  tabIndex={0}
+                >
+                  {holidayIcons[idx]}
+                </span>
                 <span style={{
                   background: hoverPurple,
                   color: '#fff',
@@ -195,6 +253,7 @@ const Holidays = () => {
               </li>
             ))}
           </ul>
+          {/* Банер-запрошення */}
           <div style={{
             marginTop: 36,
             background: `${hoverPurple}11`,
@@ -215,6 +274,26 @@ const Holidays = () => {
             </p>
           </div>
         </div>
+        {/* Tooltip для іконок свят */}
+        {tooltip.show && (
+          <div style={{
+            position: 'fixed',
+            top: tooltip.y + 12,
+            left: tooltip.x + 12,
+            background: white,
+            color: hoverPurple,
+            border: `1.5px solid ${hoverPurple}`,
+            borderRadius: 8,
+            padding: '6px 14px',
+            fontSize: '1rem',
+            fontWeight: 600,
+            boxShadow: `0 2px 8px ${hoverPurple}22`,
+            pointerEvents: 'none',
+            zIndex: 9999
+          }}>
+            {tooltip.text}
+          </div>
+        )}
       </section>
 
       {/* Contacts & Socials */}
@@ -284,4 +363,3 @@ const Holidays = () => {
 };
 
 export default Holidays;
-
