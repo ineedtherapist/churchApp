@@ -8,12 +8,6 @@ A simple online shop for church-related goods, built with React.
 - npm — for managing dependencies and scripts
 - CSS-in-JS — inline styles for component design
 
-## Project Structure
-- frontend/ — React application (main user interface)
-- src/components/Shop.jsx — main shop page
-- src/assets/images/ — product images
-- src/styles/ — shared style variables
-
 ## How to Run
 
 **Install dependencies:**
@@ -22,16 +16,23 @@ cd frontend
 npm install
 ```
 
+```sh
+cd backend
+npm install
+```
+
 **Start the development server:**
 ```sh
-npm start
+cd frontend
+npm run dev
 ```
-The app will be available at http://localhost:3000.
 
-**Build for production:**
 ```sh
-npm run build
+cd frontend
+npm run dev
 ```
+
+The app will be available at http://localhost:3000.
 
 ## Features
 - Product catalog with images and descriptions
