@@ -222,6 +222,247 @@ function BaptismReservationModal({ onPaid }) {
   );
 }
 
+function HomeBlessingModal({ onPaid }) {
+  const [name, setName] = useState('');
+  const [address, setAddress] = useState('');
+  const [date, setDate] = useState('');
+  const [error, setError] = useState('');
+  const handlePay = () => {
+    if (!name.trim() || !address.trim() || !date) {
+      setError('Please fill in all fields.');
+      return;
+    }
+    setError('');
+    onPaid();
+  };
+  return (
+    <>
+      <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Your Name</label>
+      <input
+        type="text"
+        placeholder="Enter your name"
+        value={name}
+        onChange={e => setName(e.target.value)}
+        style={{
+          width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 12
+        }}
+      />
+      <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Address</label>
+      <input
+        type="text"
+        placeholder="Enter address"
+        value={address}
+        onChange={e => setAddress(e.target.value)}
+        style={{
+          width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 12
+        }}
+      />
+      <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Preferred Date</label>
+      <input
+        type="date"
+        value={date}
+        onChange={e => setDate(e.target.value)}
+        style={{
+          width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 16
+        }}
+      />
+      {error && <div style={{ color: '#ef233c', marginBottom: 10, fontWeight: 500 }}>{error}</div>}
+      <button
+        style={{
+          background: gold, color: white, border: 'none', borderRadius: 6, padding: '8px 18px', fontWeight: 600, cursor: 'pointer'
+        }}
+        onClick={handlePay}
+      >
+        Pay (400 UAH)
+      </button>
+    </>
+  );
+}
+
+function ConfessionModal({ onPaid }) {
+  const [name, setName] = useState('');
+  const [date, setDate] = useState('');
+  const [error, setError] = useState('');
+  const handlePay = () => {
+    if (!name.trim() || !date) {
+      setError('Please fill in all fields.');
+      return;
+    }
+    setError('');
+    onPaid();
+  };
+  return (
+    <>
+      <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Your Name</label>
+      <input
+        type="text"
+        placeholder="Enter your name"
+        value={name}
+        onChange={e => setName(e.target.value)}
+        style={{
+          width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 12
+        }}
+      />
+      <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Preferred Date</label>
+      <input
+        type="date"
+        value={date}
+        onChange={e => setDate(e.target.value)}
+        style={{
+          width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 16
+        }}
+      />
+      {error && <div style={{ color: '#ef233c', marginBottom: 10, fontWeight: 500 }}>{error}</div>}
+      <button
+        style={{
+          background: gold, color: white, border: 'none', borderRadius: 6, padding: '8px 18px', fontWeight: 600, cursor: 'pointer'
+        }}
+        onClick={handlePay}
+      >
+        Pay (150 UAH)
+      </button>
+    </>
+  );
+}
+
+function MemorialServiceModal({ onPaid }) {
+  const [name, setName] = useState('');
+  const [date, setDate] = useState('');
+  const [error, setError] = useState('');
+  const handlePay = () => {
+    if (!name.trim() || !date) {
+      setError('Please fill in all fields.');
+      return;
+    }
+    setError('');
+    onPaid();
+  };
+  return (
+    <>
+      <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Name for Memorial</label>
+      <input
+        type="text"
+        placeholder="Enter name"
+        value={name}
+        onChange={e => setName(e.target.value)}
+        style={{
+          width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 12
+        }}
+      />
+      <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Preferred Date</label>
+      <input
+        type="date"
+        value={date}
+        onChange={e => setDate(e.target.value)}
+        style={{
+          width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 16
+        }}
+      />
+      {error && <div style={{ color: '#ef233c', marginBottom: 10, fontWeight: 500 }}>{error}</div>}
+      <button
+        style={{
+          background: gold, color: white, border: 'none', borderRadius: 6, padding: '8px 18px', fontWeight: 600, cursor: 'pointer'
+        }}
+        onClick={handlePay}
+      >
+        Pay (300 UAH)
+      </button>
+    </>
+  );
+}
+
+function WeddingReservationModal({ onPaid }) {
+  const [names, setNames] = useState('');
+  const [date, setDate] = useState('');
+  const [error, setError] = useState('');
+  const handlePay = () => {
+    if (!names.trim() || !date) {
+      setError('Please fill in all fields.');
+      return;
+    }
+    setError('');
+    onPaid();
+  };
+  return (
+    <>
+      <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Names of Couple</label>
+      <input
+        type="text"
+        placeholder="Enter names"
+        value={names}
+        onChange={e => setNames(e.target.value)}
+        style={{
+          width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 12
+        }}
+      />
+      <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Preferred Date</label>
+      <input
+        type="date"
+        value={date}
+        onChange={e => setDate(e.target.value)}
+        style={{
+          width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 16
+        }}
+      />
+      {error && <div style={{ color: '#ef233c', marginBottom: 10, fontWeight: 500 }}>{error}</div>}
+      <button
+        style={{
+          background: gold, color: white, border: 'none', borderRadius: 6, padding: '8px 18px', fontWeight: 600, cursor: 'pointer'
+        }}
+        onClick={handlePay}
+      >
+        Pay (700 UAH)
+      </button>
+    </>
+  );
+}
+
+function SpiritualCounselingModal({ onPaid }) {
+  const [name, setName] = useState('');
+  const [date, setDate] = useState('');
+  const [error, setError] = useState('');
+  const handlePay = () => {
+    if (!name.trim() || !date) {
+      setError('Please fill in all fields.');
+      return;
+    }
+    setError('');
+    onPaid();
+  };
+  return (
+    <>
+      <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Your Name</label>
+      <input
+        type="text"
+        placeholder="Enter your name"
+        value={name}
+        onChange={e => setName(e.target.value)}
+        style={{
+          width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 12
+        }}
+      />
+      <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Preferred Date</label>
+      <input
+        type="date"
+        value={date}
+        onChange={e => setDate(e.target.value)}
+        style={{
+          width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 16
+        }}
+      />
+      {error && <div style={{ color: '#ef233c', marginBottom: 10, fontWeight: 500 }}>{error}</div>}
+      <button
+        style={{
+          background: gold, color: white, border: 'none', borderRadius: 6, padding: '8px 18px', fontWeight: 600, cursor: 'pointer'
+        }}
+        onClick={handlePay}
+      >
+        Pay (250 UAH)
+      </button>
+    </>
+  );
+}
+
 const services = [
   {
     title: 'Light a Candle',
@@ -246,10 +487,51 @@ const services = [
     price: 200,
     description: 'Reserve a bench for the upcoming holidays.',
     modalComponent: BenchReservationModal
+  },
+  {
+    title: 'Request Home Blessing',
+    price: 400,
+    description: 'Request a priest to bless your home on a chosen date.',
+    modalComponent: HomeBlessingModal
+  },
+  {
+    title: 'Confession Appointment',
+    price: 150,
+    description: 'Book a confession appointment with a priest.',
+    modalComponent: ConfessionModal
+  },
+  {
+    title: 'Order Memorial Service',
+    price: 300,
+    description: 'Order a memorial service for a loved one.',
+    modalComponent: MemorialServiceModal
+  },
+  {
+    title: 'Wedding Reservation',
+    price: 700,
+    description: 'Reserve a date for your wedding ceremony.',
+    modalComponent: WeddingReservationModal
+  },
+  {
+    title: 'Request Spiritual Counseling',
+    price: 250,
+    description: 'Book a spiritual counseling session with a priest.',
+    modalComponent: SpiritualCounselingModal
   }
 ];
 
-// ...existing code for modalStyle, modalContentStyle...
+// --- Icons for services ---
+const serviceIcons = [
+  "🕯️", // Light a Candle
+  "📜", // Prayer List
+  "👶", // Baptism Reservation
+  "🪑", // Bench Reservation
+  "🏠", // Home Blessing
+  "🙏", // Confession
+  "🕊️", // Memorial Service
+  "💍",  // Wedding Reservation
+  "💬"   // Spiritual Counseling
+];
 
 const Services = () => {
   const [openIdx, setOpenIdx] = useState(null);
@@ -281,7 +563,11 @@ const Services = () => {
   };
 
   return (
-    <div style={{ background: white, minHeight: '100vh', position: 'relative' }}>
+    <div style={{
+      background: 'linear-gradient(135deg, #f8f8ff 0%, #fffbe6 100%)',
+      minHeight: '100vh',
+      position: 'relative'
+    }}>
       <Header />
       <div style={{
         width: '100vw',
@@ -328,57 +614,98 @@ const Services = () => {
       <div style={{ height: 24 }} />
 
       <section style={{
-        maxWidth: 900,
+        maxWidth: 1200, // збільшено ширину секції
         margin: '0 auto 48px auto',
-        padding: '0 12px',
-        textAlign: 'center'
+        padding: '0 32px 48px 32px', // збільшено падінги
+        textAlign: 'center',
+        background: 'rgba(255,255,255,0.85)',
+        borderRadius: 18,
+        boxShadow: `0 2px 24px ${hoverPurple}10`,
+        position: 'relative'
       }}>
         <h2 style={{
           color: gold,
-          marginBottom: 24,
-          fontSize: '2rem',
-          letterSpacing: '1px'
+          marginBottom: 8,
+          fontSize: '2.2rem',
+          letterSpacing: '1px',
+          fontWeight: 800
         }}>
           Church Services
         </h2>
         <div style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: 32,
-          justifyContent: 'center'
+          width: 80,
+          height: 4,
+          background: hoverPurple,
+          borderRadius: 2,
+          margin: '0 auto 18px auto',
+          opacity: 0.18
+        }} />
+        <div style={{
+          color: darkGold,
+          fontWeight: 500,
+          fontSize: '1.08rem',
+          marginBottom: 32,
+          letterSpacing: '.5px'
         }}>
+          Choose a service to support your spiritual needs
+        </div>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: 36,
+            justifyItems: 'center',
+            alignItems: 'stretch',
+            minHeight: 340
+          }}
+        >
           {services.map((s, idx) => (
             <div
               key={s.title}
               style={{
                 background: white,
                 border: `2px solid ${gold}`,
-                borderRadius: 14,
-                boxShadow: `0 2px 12px ${hoverPurple}11`,
-                padding: '28px 22px 22px 22px',
-                width: 260,
-                minHeight: 180,
+                borderRadius: 18,
+                boxShadow: `0 4px 24px ${hoverPurple}11`,
+                padding: '38px 28px 28px 28px',
+                width: 270,
+                minHeight: 220,
                 cursor: 'pointer',
-                transition: 'box-shadow 0.2s, border 0.2s, transform 0.15s',
+                transition: 'box-shadow 0.25s, border 0.25s, transform 0.18s',
                 textAlign: 'left',
-                position: 'relative'
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                opacity: 1,
+                animation: 'fadeInUp 0.7s cubic-bezier(.23,1.02,.47,.98)',
+                animationDelay: `${idx * 0.08}s`,
+                animationFillMode: 'backwards'
               }}
               onClick={() => setOpenIdx(idx)}
               onMouseOver={e => {
-                e.currentTarget.style.boxShadow = `0 4px 24px ${hoverPurple}33`;
-                e.currentTarget.style.border = `2px solid ${hoverPurple}`;
-                e.currentTarget.style.transform = 'translateY(-2px) scale(1.03)';
+                e.currentTarget.style.boxShadow = `0 8px 32px ${hoverPurple}33`;
+                e.currentTarget.style.border = `2.5px solid ${hoverPurple}`;
+                e.currentTarget.style.transform = 'translateY(-4px) scale(1.035)';
               }}
               onMouseOut={e => {
-                e.currentTarget.style.boxShadow = `0 2px 12px ${hoverPurple}11`;
+                e.currentTarget.style.boxShadow = `0 4px 24px ${hoverPurple}11`;
                 e.currentTarget.style.border = `2px solid ${gold}`;
                 e.currentTarget.style.transform = 'none';
               }}
             >
+              <div style={{
+                fontSize: 38,
+                marginBottom: 10,
+                marginLeft: -2,
+                filter: 'drop-shadow(0 2px 6px #9d4edd22)'
+              }}>
+                {serviceIcons[idx]}
+              </div>
               <div style={{ fontWeight: 700, color: gold, fontSize: '1.18rem', marginBottom: 8 }}>
                 {s.title}
               </div>
-              <div style={{ color: '#444', fontSize: '1.05rem', marginBottom: 14 }}>
+              <div style={{ color: '#444', fontSize: '1.05rem', marginBottom: 14, minHeight: 48 }}>
                 {s.description}
               </div>
               <div style={{
@@ -398,13 +725,20 @@ const Services = () => {
 
       {/* Modal */}
       {openIdx !== null && (
-        <div style={modalStyle} onClick={() => setOpenIdx(null)}>
+        <div style={{
+          ...modalStyle,
+          backdropFilter: 'blur(2.5px)'
+        }} onClick={() => setOpenIdx(null)}>
           <div
-            style={modalContentStyle}
+            style={{
+              ...modalContentStyle,
+              boxShadow: `0 8px 40px ${hoverPurple}33, 0 1.5px 8px #0001`,
+              animation: 'modalPop 0.33s cubic-bezier(.23,1.02,.47,.98)'
+            }}
             onClick={e => e.stopPropagation()}
           >
             <div style={{ fontWeight: 700, color: gold, fontSize: '1.18rem', marginBottom: 12 }}>
-              {services[openIdx].title}
+              {serviceIcons[openIdx]} {services[openIdx].title}
             </div>
             <div style={{ marginBottom: 18, color: '#444' }}>
               {services[openIdx].description}
@@ -424,6 +758,7 @@ const Services = () => {
                 fontWeight: 700
               }}
               aria-label="Close"
+              title="Close"
             >×</button>
           </div>
         </div>
@@ -431,7 +766,10 @@ const Services = () => {
 
       {/* Paid Modal */}
       {showPaid && (
-        <div style={modalStyle}>
+        <div style={{
+          ...modalStyle,
+          backdropFilter: 'blur(2.5px)'
+        }}>
           <div style={{
             ...modalContentStyle,
             display: 'flex',
@@ -440,7 +778,8 @@ const Services = () => {
             justifyContent: 'center',
             minWidth: 220,
             maxWidth: 260,
-            padding: '36px 24px'
+            padding: '36px 24px',
+            animation: 'modalPop 0.33s cubic-bezier(.23,1.02,.47,.98)'
           }}>
             <span style={{ fontSize: 38, color: gold, marginBottom: 12 }}>✔️</span>
             <div style={{ color: gold, fontWeight: 700, fontSize: '1.18rem', marginBottom: 6 }}>
@@ -465,6 +804,31 @@ const Services = () => {
       }}>
         © 2024 Your Online Church. All rights reserved.
       </footer>
+      {/* Keyframes for fadeInUp and modalPop animation */}
+      <style>
+        {`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(32px);
+          }
+          to {
+            opacity: 1;
+            transform: none;
+          }
+        }
+        @keyframes modalPop {
+          from {
+            opacity: 0;
+            transform: scale(0.92) translateY(24px);
+          }
+          to {
+            opacity: 1;
+            transform: none;
+          }
+        }
+        `}
+      </style>
     </div>
   );
 };
@@ -491,3 +855,4 @@ const modalContentStyle = {
 };
 
 export default Services;
+
