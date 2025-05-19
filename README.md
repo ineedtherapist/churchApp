@@ -45,9 +45,6 @@ The app will be available at http://localhost:3000.
 - To add or update products, edit the products array in Shop.jsx.
 - To change product images, add new images to src/assets/images/ and update imports in Shop.jsx.
 
-## Demo
-<img src="src/assets/images/BibleNotebook.jpg" alt="Shop Screenshot"></img>
-
 ## License
 This project is for educational and demonstration purposes.
 
