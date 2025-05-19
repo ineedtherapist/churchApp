@@ -16,10 +16,11 @@ function BenchReservationModal({ onPaid, onClose }) {
   const [selectedBench, setSelectedBench] = useState('');
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
   const [error, setError] = useState('');
 
   const handleReserve = () => {
-    if (!name.trim() || !date || !selectedBench) {
+    if (!name.trim() || !date || !selectedBench || !time) {
       setError('Please fill in all fields.');
       return;
     }
@@ -46,6 +47,15 @@ function BenchReservationModal({ onPaid, onClose }) {
         onChange={e => setDate(e.target.value)}
         style={{
           width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 12
+        }}
+      />
+      <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Time</label>
+      <input
+        type="time"
+        value={time}
+        onChange={e => setTime(e.target.value)}
+        style={{
+          width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 16
         }}
       />
       <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Available benches</label>
@@ -177,11 +187,12 @@ function PrayerListModal({ onPaid }) {
 function BaptismReservationModal({ onPaid }) {
   const [childName, setChildName] = useState('');
   const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
   const [error, setError] = useState('');
 
   const handleReserve = () => {
-    if (!childName.trim() || !date) {
-      setError('Please enter child\'s name and date.');
+    if (!childName.trim() || !date || !time) {
+      setError('Please enter child\'s name, date and time.');
       return;
     }
     setError('');
@@ -209,6 +220,15 @@ function BaptismReservationModal({ onPaid }) {
           width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 16
         }}
       />
+      <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Preferred Time</label>
+      <input
+        type="time"
+        value={time}
+        onChange={e => setTime(e.target.value)}
+        style={{
+          width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 16
+        }}
+      />
       {error && <div style={{ color: '#ef233c', marginBottom: 10, fontWeight: 500 }}>{error}</div>}
       <button
         style={{
@@ -226,9 +246,10 @@ function HomeBlessingModal({ onPaid }) {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
   const [error, setError] = useState('');
   const handlePay = () => {
-    if (!name.trim() || !address.trim() || !date) {
+    if (!name.trim() || !address.trim() || !date || !time) {
       setError('Please fill in all fields.');
       return;
     }
@@ -266,6 +287,15 @@ function HomeBlessingModal({ onPaid }) {
           width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 16
         }}
       />
+      <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Preferred Time</label>
+      <input
+        type="time"
+        value={time}
+        onChange={e => setTime(e.target.value)}
+        style={{
+          width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 16
+        }}
+      />
       {error && <div style={{ color: '#ef233c', marginBottom: 10, fontWeight: 500 }}>{error}</div>}
       <button
         style={{
@@ -282,9 +312,10 @@ function HomeBlessingModal({ onPaid }) {
 function ConfessionModal({ onPaid }) {
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
   const [error, setError] = useState('');
   const handlePay = () => {
-    if (!name.trim() || !date) {
+    if (!name.trim() || !date || !time) {
       setError('Please fill in all fields.');
       return;
     }
@@ -312,6 +343,15 @@ function ConfessionModal({ onPaid }) {
           width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 16
         }}
       />
+      <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Preferred Time</label>
+      <input
+        type="time"
+        value={time}
+        onChange={e => setTime(e.target.value)}
+        style={{
+          width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 16
+        }}
+      />
       {error && <div style={{ color: '#ef233c', marginBottom: 10, fontWeight: 500 }}>{error}</div>}
       <button
         style={{
@@ -328,9 +368,10 @@ function ConfessionModal({ onPaid }) {
 function MemorialServiceModal({ onPaid }) {
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
   const [error, setError] = useState('');
   const handlePay = () => {
-    if (!name.trim() || !date) {
+    if (!name.trim() || !date || !time) {
       setError('Please fill in all fields.');
       return;
     }
@@ -358,6 +399,15 @@ function MemorialServiceModal({ onPaid }) {
           width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 16
         }}
       />
+      <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Preferred Time</label>
+      <input
+        type="time"
+        value={time}
+        onChange={e => setTime(e.target.value)}
+        style={{
+          width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 16
+        }}
+      />
       {error && <div style={{ color: '#ef233c', marginBottom: 10, fontWeight: 500 }}>{error}</div>}
       <button
         style={{
@@ -374,9 +424,10 @@ function MemorialServiceModal({ onPaid }) {
 function WeddingReservationModal({ onPaid }) {
   const [names, setNames] = useState('');
   const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
   const [error, setError] = useState('');
   const handlePay = () => {
-    if (!names.trim() || !date) {
+    if (!names.trim() || !date || !time) {
       setError('Please fill in all fields.');
       return;
     }
@@ -404,6 +455,15 @@ function WeddingReservationModal({ onPaid }) {
           width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 16
         }}
       />
+      <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Preferred Time</label>
+      <input
+        type="time"
+        value={time}
+        onChange={e => setTime(e.target.value)}
+        style={{
+          width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 16
+        }}
+      />
       {error && <div style={{ color: '#ef233c', marginBottom: 10, fontWeight: 500 }}>{error}</div>}
       <button
         style={{
@@ -420,9 +480,10 @@ function WeddingReservationModal({ onPaid }) {
 function SpiritualCounselingModal({ onPaid }) {
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
   const [error, setError] = useState('');
   const handlePay = () => {
-    if (!name.trim() || !date) {
+    if (!name.trim() || !date || !time) {
       setError('Please fill in all fields.');
       return;
     }
@@ -446,6 +507,15 @@ function SpiritualCounselingModal({ onPaid }) {
         type="date"
         value={date}
         onChange={e => setDate(e.target.value)}
+        style={{
+          width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 16
+        }}
+      />
+      <label style={{ display: 'block', marginBottom: 8, color: darkGold }}>Preferred Time</label>
+      <input
+        type="time"
+        value={time}
+        onChange={e => setTime(e.target.value)}
         style={{
           width: '100%', padding: 8, borderRadius: 6, border: `1px solid ${gold}`, marginBottom: 16
         }}
