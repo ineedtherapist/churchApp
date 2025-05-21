@@ -23,7 +23,7 @@ npm install
 
 **Start the development server:**
 ```sh
-cd frontend
+cd backend
 npm run dev
 ```
 
