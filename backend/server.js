@@ -4,7 +4,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const dotenv = require('dotenv');
 const path = require('path');
-const { Login, Passwd } = require('./models/User');
+const bcrypt = require('bcryptjs');
+const User = require('./models/User');
 
 // Load environment variables
 dotenv.config();
@@ -47,29 +48,32 @@ mongoose.connect(process.env.MONGO_URI)
 
     // Initialize admin user
     try {
-      // Check if admin exists in login collection
-      const adminLogin = await Login.findOne({ name: 'admin' });
+      // Check if admin exists
+      const adminExists = await User.findOne({ username: 'admin' });
 
-      if (!adminLogin) {
-        // Create admin in login collection
-        const newAdmin = await Login.create({ name: 'admin' });
-        // Create admin in passwd collection with reference to the admin user
-        await Passwd.create({ 
-          passwd: 'admin',
-          userId: newAdmin._id,
-          isActive: true
+      if (!adminExists) {
+        // Create admin user
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash('admin', salt);
+
+        await User.create({
+          username: 'admin',
+          password: hashedPassword,
+          role: 'admin'
         });
         console.log('Admin user created');
       }
     } catch (error) {
-      console.error('Error creating admin user:', error);
+      console.error('Error initializing admin user:', error);
     }
 
     // Start server
     const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    app.listen(PORT, () => {
+      console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+    });
   })
-  .catch(err => {
-    console.error('MongoDB connection error:', err.message);
+  .catch((error) => {
+    console.error('Failed to connect to MongoDB', error);
     process.exit(1);
   });

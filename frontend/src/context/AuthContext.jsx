@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Load user from localStorage on initial render
+  // Load user from JWT token on initial render
   useEffect(() => {
     const loadUser = async () => {
       try {
@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
         // Set default headers for all axios requests
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         
-        // Get user data
+        // Get user data using token
         const res = await axios.get('/api/users/profile/me');
         
         setUser(res.data);
@@ -49,16 +49,16 @@ export const AuthProvider = ({ children }) => {
       // Save token to localStorage
       localStorage.setItem('token', res.data.token);
       
-      // Set default headers for all axios requests
+      // Set authorization header
       axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
       
+      // Set user and auth state
       setUser(res.data);
       setIsAuthenticated(true);
-      
-      return res.data;
+      return true;
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');
-      throw err;
+      return false;
     }
   };
 
@@ -71,16 +71,16 @@ export const AuthProvider = ({ children }) => {
       // Save token to localStorage
       localStorage.setItem('token', res.data.token);
       
-      // Set default headers for all axios requests
+      // Set authorization header
       axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
       
+      // Set user and auth state
       setUser(res.data);
       setIsAuthenticated(true);
-      
-      return res.data;
+      return true;
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
-      throw err;
+      setError(err.response?.data?.message || 'Invalid credentials');
+      return false;
     }
   };
 
@@ -89,9 +89,10 @@ export const AuthProvider = ({ children }) => {
     // Remove token from localStorage
     localStorage.removeItem('token');
     
-    // Remove Authorization header
+    // Remove authorization header
     delete axios.defaults.headers.common['Authorization'];
     
+    // Reset state
     setUser(null);
     setIsAuthenticated(false);
   };
@@ -113,11 +114,5 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use the auth context
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+export const useAuth = () => useContext(AuthContext);
+

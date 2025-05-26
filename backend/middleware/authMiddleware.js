@@ -1,5 +1,12 @@
 const jwt = require('jsonwebtoken');
-const { Login, Passwd, User } = require('../models/User');
+const User = require('../models/User');
+
+// Generate JWT token
+exports.generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: '30d'
+  });
+};
 
 // Protect routes - verify JWT token
 exports.protect = async (req, res, next) => {
@@ -15,18 +22,14 @@ exports.protect = async (req, res, next) => {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       // Get user from the token
-      const login = await Login.findById(decoded.id);
+      const user = await User.findById(decoded.id).select('-password');
 
-      if (!login) {
+      if (!user) {
         return res.status(401).json({ message: 'Not authorized, user not found' });
       }
 
-      // Create user object
-      req.user = {
-        _id: login._id,
-        username: login.name,
-        role: login.name === 'admin' ? 'admin' : 'user'
-      };
+      // Add user to request object
+      req.user = user;
 
       next();
     } catch (error) {
@@ -49,9 +52,3 @@ exports.admin = (req, res, next) => {
   }
 };
 
-// Generate JWT token
-exports.generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30d'
-  });
-};
