@@ -4,6 +4,14 @@ import axios from 'axios';
 import { useAuth } from '../../context/AuthContext.jsx';
 import UserList from './UserList.jsx';
 import UserForm from './UserForm.jsx';
+import {
+  adminContainerStyle,
+  adminHeaderStyle,
+  adminTitleStyle,
+  adminNavStyle,
+  adminPrimaryButton,
+  adminDangerButton
+} from '../../styles/sharedStyles.js';
 
 const AdminPanel = () => {
   const { user, logout } = useAuth();
@@ -14,14 +22,18 @@ const AdminPanel = () => {
     navigate('/login');
   };
 
+  const goToHomePage = () => {
+    // Navigate to the actual home page outside of admin routes
+    window.location.href = '/';
+  };
+
   return (
-    <div className="container">
-      <div className="admin-header">
-        <h1>Admin Panel</h1>
-        <div className="admin-nav">
-          {/* <Link to="/admin" className="btn">Users</Link>
-          <Link to="/" className="btn">Home</Link> */}
-          <button onClick={handleLogout} className="btn btn-danger">Logout</button>
+    <div style={adminContainerStyle}>
+      <div style={adminHeaderStyle}>
+        <h1 style={adminTitleStyle}>Admin Panel</h1>
+        <div style={adminNavStyle}>
+          <button onClick={goToHomePage} style={adminPrimaryButton}>Home</button>
+          <button onClick={handleLogout} style={adminDangerButton}>Logout</button>
         </div>
       </div>
       

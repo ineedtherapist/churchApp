@@ -98,3 +98,63 @@ export const headerDivider = {
   borderRadius: 2,
   zIndex: 0
 };
+
+// Admin Panel Styles
+export const adminContainerStyle = {
+  maxWidth: '1200px',
+  margin: '20px auto',
+  padding: '0 20px',
+  backgroundColor: white,
+  borderRadius: '8px',
+  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+};
+
+export const adminHeaderStyle = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: '20px 0',
+  borderBottom: `2px solid ${gold}`,
+  marginBottom: '20px',
+};
+
+export const adminTitleStyle = {
+  fontSize: '28px',
+  color: darkGold,
+  margin: 0,
+  fontWeight: 'bold',
+};
+
+export const adminNavStyle = {
+  display: 'flex',
+  gap: '15px',
+};
+
+export const adminPrimaryButton = {
+  background: darkGold,
+  color: white,
+  border: 'none',
+  padding: '10px 20px',
+  borderRadius: '5px',
+  fontWeight: 'bold',
+  cursor: 'pointer',
+  transition: 'background 0.3s',
+  '&:hover': {
+    background: hoverPurple,
+  },
+};
+
+export const adminDangerButton = {
+  background: '#ef233c',
+  color: white,
+  border: 'none',
+  padding: '10px 20px',
+  borderRadius: '5px',
+  fontWeight: 'bold',
+  cursor: 'pointer',
+  transition: 'background 0.3s',
+  '&:hover': {
+    background: '#c00424',
+  },
+};
+

@@ -78,6 +78,36 @@ router.put(
   }
 );
 
+// @route   PUT /api/users/:id
+// @desc    Update user by ID (admin)
+// @access  Private/Admin
+router.put('/:id', protect, admin, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update user fields
+    if (req.body.username) user.username = req.body.username;
+    if (req.body.role) user.role = req.body.role;
+    if (req.body.password) user.password = req.body.password;
+
+    // Save user to database
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      username: updatedUser.username,
+      role: updatedUser.role
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // @route   DELETE /api/users/:id
 // @desc    Delete user
 // @access  Private/Admin

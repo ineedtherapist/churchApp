@@ -1,88 +1,118 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { useUsers } from '../../context/UsersContext.jsx';
+import { adminPrimaryButton, adminDangerButton } from '../../styles/sharedStyles.js';
 
 const UserList = () => {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [deleteError, setDeleteError] = useState(null);
+  const { users, loading, deleteUser } = useUsers();
   const [successMessage, setSuccessMessage] = useState(null);
+  const [error, setError] = useState(null);
 
-  // Fetch users on component mount
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get('/api/users');
-        setUsers(res.data);
-        setError(null);
-      } catch (err) {
-        setError(err.response?.data?.message || 'Error fetching users');
-        console.error('Error fetching users:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
-  }, []);
-
-  // Delete user
-  const deleteUser = async (id, username) => {
+  const handleDeleteUser = (id, username) => {
     if (window.confirm(`Are you sure you want to delete user ${username}?`)) {
-      try {
-        await axios.delete(`/api/users/${id}`);
-        setUsers(users.filter(user => user._id !== id));
+      const result = deleteUser(id);
+
+      if (result.success) {
         setSuccessMessage(`User ${username} deleted successfully`);
-        setDeleteError(null);
-        
+        setError(null);
+
         // Clear success message after 3 seconds
         setTimeout(() => {
           setSuccessMessage(null);
         }, 3000);
-      } catch (err) {
-        setDeleteError(err.response?.data?.message || 'Error deleting user');
-        console.error('Error deleting user:', err);
+      } else {
+        setError(result.error || 'Error deleting user');
       }
     }
   };
 
   if (loading) return <div>Loading users...</div>;
 
+  const userListHeaderStyle = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '20px'
+  };
+
+  const alertStyle = {
+    padding: '10px 15px',
+    borderRadius: '5px',
+    marginBottom: '15px'
+  };
+
+  const alertSuccessStyle = {
+    ...alertStyle,
+    backgroundColor: '#d4edda',
+    color: '#155724',
+    border: '1px solid #c3e6cb'
+  };
+
+  const alertDangerStyle = {
+    ...alertStyle,
+    backgroundColor: '#f8d7da',
+    color: '#721c24',
+    border: '1px solid #f5c6cb'
+  };
+
+  const tableStyle = {
+    width: '100%',
+    borderCollapse: 'collapse'
+  };
+
+  const thStyle = {
+    textAlign: 'left',
+    padding: '12px 15px',
+    borderBottom: '1px solid #ddd'
+  };
+
+  const tdStyle = {
+    padding: '12px 15px',
+    borderBottom: '1px solid #ddd'
+  };
+
+  const actionButtonStyle = {
+    marginRight: '10px',
+    cursor: 'pointer'
+  };
+
   return (
     <div className="user-list">
-      <div className="user-list-header">
+      <div style={userListHeaderStyle}>
         <h2>Users</h2>
-        <Link to="/admin/add" className="btn btn-primary">Add User</Link>
+        <Link to="/admin/add" style={{ ...adminPrimaryButton, textDecoration: 'none' }}>Add User</Link>
       </div>
       
-      {error && <div className="alert alert-danger">{error}</div>}
-      {deleteError && <div className="alert alert-danger">{deleteError}</div>}
-      {successMessage && <div className="alert alert-success">{successMessage}</div>}
-      
+      {error && <div style={alertDangerStyle}>{error}</div>}
+      {successMessage && <div style={alertSuccessStyle}>{successMessage}</div>}
+
       {users.length === 0 ? (
         <p>No users found</p>
       ) : (
-        <table>
+        <table style={tableStyle}>
           <thead>
             <tr>
-              <th>Username</th>
-              <th>Role</th>
-              <th>Actions</th>
+              <th style={thStyle}>Username</th>
+              <th style={thStyle}>Role</th>
+              <th style={thStyle}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {users.map(user => (
               <tr key={user._id}>
-                <td>{user.username}</td>
-                <td>{user.role}</td>
-                <td>
-                  <Link to={`/admin/edit/${user._id}`} className="btn">Edit</Link>
+                <td style={tdStyle}>{user.username}</td>
+                <td style={tdStyle}>{user.role}</td>
+                <td style={tdStyle}>
+                  <Link
+                    to={`/admin/edit/${user._id}`}
+                    style={{ ...adminPrimaryButton, ...actionButtonStyle, textDecoration: 'none' }}
+                  >
+                    Edit
+                  </Link>
                   {user.username !== 'admin' && (
                     <button
-                      onClick={() => deleteUser(user._id, user.username)}
-                      className="btn btn-danger"
+                      onClick={() => handleDeleteUser(user._id, user.username)}
+                      style={{ ...adminDangerButton, ...actionButtonStyle }}
                     >
                       Delete
                     </button>
@@ -98,3 +128,4 @@ const UserList = () => {
 };
 
 export default UserList;
+

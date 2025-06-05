@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './Header.jsx';
 import WishBox from './WishBox.jsx';
 import {
@@ -138,6 +138,16 @@ const Shop = () => {
   const [cart, setCart] = useState([]);
   const [search, setSearch] = useState('');
 
+  // Animation states
+  const [productsVisible, setProductsVisible] = useState(false);
+  const [cartVisible, setCartVisible] = useState(false);
+
+  // Animation effects
+  useEffect(() => {
+    setTimeout(() => setProductsVisible(true), 100);
+    setTimeout(() => setCartVisible(true), 400);
+  }, []);
+
   const addToCart = (product) => {
     setCart((prev) => {
       const exists = prev.find(item => item.id === product.id);
@@ -184,7 +194,13 @@ const Shop = () => {
         gap: 48
       }}>
         {/* Товари */}
-        <div style={{ flex: '1 1 0', minWidth: 0 }}>
+        <div style={{
+          flex: '1 1 0',
+          minWidth: 0,
+          opacity: productsVisible ? 1 : 0,
+          transform: productsVisible ? 'translateY(0)' : 'translateY(20px)',
+          transition: 'opacity 0.5s ease, transform 0.5s ease'
+        }}>
           {/* Пошук */}
           <div style={{ marginBottom: 24, textAlign: 'center' }}>
             <input
@@ -281,7 +297,10 @@ const Shop = () => {
           boxShadow: `0 2px 12px ${hoverPurple}11`,
           padding: '24px 18px',
           position: 'sticky',
-          top: 36
+          top: 36,
+          opacity: cartVisible ? 1 : 0,
+          transform: cartVisible ? 'translateY(0)' : 'translateY(20px)',
+          transition: 'opacity 0.5s ease, transform 0.5s ease'
         }}>
           <h3 style={{ color: hoverPurple, fontSize: '1.25rem', marginBottom: 18, textAlign: 'center' }}>🛒 Your Cart</h3>
           {cart.length === 0 ? (
