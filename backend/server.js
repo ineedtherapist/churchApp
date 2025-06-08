@@ -67,11 +67,55 @@ mongoose.connect(process.env.MONGO_URI)
       console.error('Error initializing admin user:', error);
     }
 
-    // Start server
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
-      console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-    });
+    // Function to find an available port
+    const findAvailablePort = (startPort, maxAttempts = 10) => {
+      return new Promise((resolve, reject) => {
+        let currentPort = startPort;
+        let attempts = 0;
+
+        const tryPort = (port) => {
+          const server = require('http').createServer();
+
+          server.once('error', (err) => {
+            if (err.code === 'EADDRINUSE') {
+              console.log(`Port ${port} is in use, trying port ${port + 1}`);
+              server.close();
+              if (attempts < maxAttempts) {
+                attempts++;
+                tryPort(port + 1);
+              } else {
+                reject(new Error(`Could not find an available port after ${maxAttempts} attempts`));
+              }
+            } else {
+              reject(err);
+            }
+          });
+
+          server.once('listening', () => {
+            server.close();
+            resolve(port);
+          });
+
+          server.listen(port);
+        };
+
+        tryPort(currentPort);
+      });
+    };
+
+    // Start server with port fallback
+    const DEFAULT_PORT = process.env.PORT || 5000;
+
+    findAvailablePort(DEFAULT_PORT)
+      .then(port => {
+        app.listen(port, () => {
+          console.log(`Server running in ${process.env.NODE_ENV} mode on port ${port}`);
+        });
+      })
+      .catch(err => {
+        console.error('Failed to start server:', err);
+        process.exit(1);
+      });
   })
   .catch((error) => {
     console.error('Failed to connect to MongoDB', error);

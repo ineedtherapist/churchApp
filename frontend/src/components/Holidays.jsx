@@ -147,7 +147,6 @@ const Holidays = () => {
         opacity: visible ? 1 : 0,
         transform: visible ? 'translateY(0)' : 'translateY(40px)',
         transition: 'opacity 0.7s, transform 0.7s',
-        background: 'linear-gradient(120deg, #f8f8ff 0%, #fffbe6 100%)',
         paddingBottom: 32
       }}>
         {/* Декоративна хвилька під заголовком */}
