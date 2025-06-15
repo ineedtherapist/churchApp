@@ -99,19 +99,19 @@ const UserList = () => {
           </thead>
           <tbody>
             {users.map(user => (
-              <tr key={user._id}>
+              <tr key={user.id}>
                 <td style={tdStyle}>{user.username}</td>
                 <td style={tdStyle}>{user.role}</td>
                 <td style={tdStyle}>
                   <Link
-                    to={`/admin/edit/${user._id}`}
+                    to={`/admin/edit/${user.id}`}
                     style={{ ...adminPrimaryButton, ...actionButtonStyle, textDecoration: 'none' }}
                   >
                     Edit
                   </Link>
                   {user.username !== 'admin' && (
                     <button
-                      onClick={() => handleDeleteUser(user._id, user.username)}
+                      onClick={() => handleDeleteUser(user.id, user.username)}
                       style={{ ...adminDangerButton, ...actionButtonStyle }}
                     >
                       Delete
@@ -128,4 +128,3 @@ const UserList = () => {
 };
 
 export default UserList;
-

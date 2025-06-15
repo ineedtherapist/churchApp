@@ -141,11 +141,36 @@ const Shop = () => {
   // Animation states
   const [productsVisible, setProductsVisible] = useState(false);
   const [cartVisible, setCartVisible] = useState(false);
+  const [visibleProducts, setVisibleProducts] = useState({}); // Стан для відстеження видимості товарів при прокрутці
 
   // Animation effects
   useEffect(() => {
     setTimeout(() => setProductsVisible(true), 100);
     setTimeout(() => setCartVisible(true), 400);
+
+    // Налаштування Intersection Observer для анімації при прокрутці
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const productId = entry.target.dataset.productId;
+          if (productId) {
+            setVisibleProducts(prev => ({
+              ...prev,
+              [productId]: true
+            }));
+          }
+        }
+      });
+    }, { threshold: 0.1 }); // Елемент стає видимим, коли хоча б 10% його показано
+
+    // Спостереження за товарами відбудеться після рендерингу
+    setTimeout(() => {
+      document.querySelectorAll('.product-item').forEach(item => {
+        observer.observe(item);
+      });
+    }, 100);
+
+    return () => observer.disconnect(); // Очистка при демонтажі компонента
   }, []);
 
   const addToCart = (product) => {
@@ -184,13 +209,56 @@ const Shop = () => {
   return (
     <div style={{ background: 'linear-gradient(135deg, #f8f8ff 0%, #fffbe6 100%)', minHeight: '100vh', position: 'relative' }}>
       <Header />
+      {/* SVG Wave Decoration */}
+      <div style={{
+        width: '100vw',
+        position: 'relative',
+        left: '50%',
+        right: '50%',
+        marginLeft: '-50vw',
+        marginRight: '-50vw',
+        overflow: 'hidden',
+        lineHeight: 0,
+        padding: 0
+      }}>
+        <svg
+          viewBox={`0 0 ${window.innerWidth} 60`}
+          width="100%"
+          height="60"
+          preserveAspectRatio="none"
+          style={{ display: 'block' }}
+        >
+          <path
+            fill={hoverPurple}
+            fillOpacity="0.08"
+            d={`
+              M0,32
+              L${window.innerWidth * 0.033},37.3
+              C${window.innerWidth * 0.066},43,${window.innerWidth * 0.133},53,${window.innerWidth * 0.2},58.7
+              C${window.innerWidth * 0.266},64,${window.innerWidth * 0.333},64,${window.innerWidth * 0.4},53.3
+              C${window.innerWidth * 0.466},43,${window.innerWidth * 0.533},21,${window.innerWidth * 0.6},16
+              C${window.innerWidth * 0.666},11,${window.innerWidth * 0.733},21,${window.innerWidth * 0.8},32
+              C${window.innerWidth * 0.866},43,${window.innerWidth * 0.933},53,${window.innerWidth * 0.966},58.7
+              L${window.innerWidth},64
+              L${window.innerWidth},0
+              L${window.innerWidth * 0.966},0
+              C${window.innerWidth * 0.933},0,${window.innerWidth * 0.866},0,${window.innerWidth * 0.8},0
+              C${window.innerWidth * 0.733},0,${window.innerWidth * 0.666},0,${window.innerWidth * 0.6},0
+              C${window.innerWidth * 0.533},0,${window.innerWidth * 0.466},0,${window.innerWidth * 0.4},0
+              C${window.innerWidth * 0.333},0,${window.innerWidth * 0.266},0,${window.innerWidth * 0.2},0
+              C${window.innerWidth * 0.133},0,${window.innerWidth * 0.066},0,${window.innerWidth * 0.033},0
+              L0,0Z
+            `}
+          ></path>
+        </svg>
+      </div>
       <div style={{
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'center',
         maxWidth: 1400,
-        margin: '0 auto',
-        padding: '36px 0 48px 0',
+        margin: '-10px auto 0', // Змінено: додав від'ємний верхній відступ
+        padding: '12px 0 48px 0', // Змінено: зменшив верхній падінг з 36px до 12px
         gap: 48
       }}>
         {/* Товари */}
@@ -233,8 +301,9 @@ const Shop = () => {
                 No products found.
               </div>
             ) : (
-              filteredProducts.map(product => (
-                <div key={product.id} style={{
+              filteredProducts.map(product => {
+                // Підготовка стилів для картки продукту
+                const productCardStyles = {
                   background: white,
                   border: `1.5px solid ${gold}`,
                   borderRadius: 14,
@@ -244,46 +313,52 @@ const Shop = () => {
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  transition: 'box-shadow 0.2s, transform 0.2s'
-                }}>
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    style={{
-                      width: '100%',
-                      height: 160,
-                      objectFit: 'cover',
-                      borderRadius: 8,
-                      marginBottom: 14,
-                      border: `1px solid ${gold}`
-                    }}
-                  />
-                  <h3 style={{ color: gold, margin: '8px 0 4px 0', fontSize: '1.18rem' }}>{product.name}</h3>
-                  <div style={{ color: '#444', fontSize: '1rem', marginBottom: 10, textAlign: 'center' }}>{product.description}</div>
-                  <div style={{ color: hoverPurple, fontWeight: 700, fontSize: '1.08rem', marginBottom: 12 }}>
-                    {product.price} ₴
+                  opacity: visibleProducts[product.id] ? 1 : 0,
+                  transform: visibleProducts[product.id] ? 'translateY(0)' : 'translateY(20px)',
+                  transition: 'box-shadow 0.2s, transform 0.5s ease, opacity 0.5s ease'
+                };
+
+                return (
+                  <div key={product.id} className="product-item" data-product-id={product.id} style={productCardStyles}>
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      style={{
+                        width: '100%',
+                        height: 160,
+                        objectFit: 'cover',
+                        borderRadius: 8,
+                        marginBottom: 14,
+                        border: `1px solid ${gold}`
+                      }}
+                    />
+                    <h3 style={{ color: gold, margin: '8px 0 4px 0', fontSize: '1.18rem' }}>{product.name}</h3>
+                    <div style={{ color: '#444', fontSize: '1rem', marginBottom: 10, textAlign: 'center' }}>{product.description}</div>
+                    <div style={{ color: hoverPurple, fontWeight: 700, fontSize: '1.08rem', marginBottom: 12 }}>
+                      {product.price} ₴
+                    </div>
+                    <button
+                      style={{
+                        background: gold,
+                        color: white,
+                        border: 'none',
+                        borderRadius: 8,
+                        padding: '8px 24px',
+                        fontWeight: 'bold',
+                        fontSize: '1.05rem',
+                        cursor: 'pointer',
+                        boxShadow: `0 2px 8px ${gold}33`,
+                        transition: 'background 0.2s'
+                      }}
+                      onMouseOver={e => e.currentTarget.style.background = hoverPurple}
+                      onMouseOut={e => e.currentTarget.style.background = gold}
+                      onClick={() => addToCart(product)}
+                    >
+                      Add to Cart
+                    </button>
                   </div>
-                  <button
-                    style={{
-                      background: gold,
-                      color: white,
-                      border: 'none',
-                      borderRadius: 8,
-                      padding: '8px 24px',
-                      fontWeight: 'bold',
-                      fontSize: '1.05rem',
-                      cursor: 'pointer',
-                      boxShadow: `0 2px 8px ${gold}33`,
-                      transition: 'background 0.2s'
-                    }}
-                    onMouseOver={e => e.currentTarget.style.background = hoverPurple}
-                    onMouseOut={e => e.currentTarget.style.background = gold}
-                    onClick={() => addToCart(product)}
-                  >
-                    Add to Cart
-                  </button>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         </div>
@@ -394,7 +469,10 @@ const Shop = () => {
                 }}
                 onMouseOver={e => e.currentTarget.style.background = hoverPurple}
                 onMouseOut={e => e.currentTarget.style.background = gold}
-                onClick={() => alert('Thank you for your order! (Demo)')}
+                onClick={() => {
+                  alert('Thank you for your order! (Demo)');
+                  setCart([]); // Очищення корзини після оформлення замовлення
+                }}
               >
                 Checkout
               </button>

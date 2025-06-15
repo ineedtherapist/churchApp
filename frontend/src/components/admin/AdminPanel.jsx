@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../../context/AuthContext.jsx';
 import UserList from './UserList.jsx';
 import UserForm from './UserForm.jsx';

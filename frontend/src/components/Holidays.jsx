@@ -91,7 +91,7 @@ const Holidays = () => {
   };
 
   return (
-    <div style={{ background: white, minHeight: '100vh', position: 'relative' }}>
+    <div style={{ background: 'linear-gradient(135deg, #f8f8ff 0%, #fffbe6 100%)', minHeight: '100vh', position: 'relative' }}>
       <Header />
       {/* SVG Wave Decoration */}
       <div style={{

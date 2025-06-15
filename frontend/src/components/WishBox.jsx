@@ -4,11 +4,16 @@ import { gold, hoverPurple, white } from '../styles/sharedStyles';
 const WishBox = () => {
   const [donateOpen, setDonateOpen] = useState(false);
 
+  // Функція для перемикання стану скриньки побажань
+  const toggleWishBox = () => {
+    setDonateOpen(prev => !prev);
+  };
+
   return (
     <>
       {/* Скринька побажань (кнопка) */}
       <button
-        onClick={() => setDonateOpen(true)}
+        onClick={toggleWishBox}
         style={{
           position: 'fixed',
           right: 32,
@@ -49,12 +54,22 @@ const WishBox = () => {
             boxShadow: `0 6px 32px ${hoverPurple}22`,
             width: 340,
             maxWidth: '90vw',
-            padding: '28px 22px 18px 22px',
-            animation: 'fadeInDonate 0.25s',
+            padding: '24px 22px 22px',
+            animation: 'fadeInDonate 0.25s'
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-            <div style={{ fontWeight: 700, color: gold, fontSize: '1.18rem', letterSpacing: '1px' }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 14
+          }}>
+            <div style={{
+              fontWeight: 700,
+              color: gold,
+              fontSize: '1.2rem',
+              letterSpacing: '1px'
+            }}>
               Wish & Donate Box
             </div>
             <button
@@ -66,12 +81,20 @@ const WishBox = () => {
                 fontSize: 22,
                 fontWeight: 700,
                 cursor: 'pointer',
-                marginLeft: 8
+                marginRight: 10,
+                padding: 0,
+                position: 'absolute',
+                right: 18,
+                top: 20
               }}
               aria-label="Close"
             >×</button>
           </div>
-          <div style={{ color: '#444', fontSize: '1.05rem', marginBottom: 14 }}>
+          <div style={{
+            color: '#444',
+            fontSize: '1.05rem',
+            marginBottom: 18
+          }}>
             Leave your wish or make a donation to support our church community.
           </div>
           <form
@@ -80,18 +103,24 @@ const WishBox = () => {
               alert('Thank you for your wish or donation! (Demo)');
               setDonateOpen(false);
             }}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center'
+            }}
           >
             <textarea
               placeholder="Your wish or prayer request..."
               style={{
-                width: '100%',
-                minHeight: 54,
+                width: '92%',
+                minHeight: 60,
                 borderRadius: 8,
                 border: `1.5px solid ${hoverPurple}`,
-                padding: '8px 10px',
+                padding: '10px 12px',
                 fontSize: '1rem',
-                marginBottom: 12,
-                resize: 'vertical'
+                marginBottom: 14,
+                resize: 'none',
+                outline: 'none'
               }}
               maxLength={200}
               required
@@ -101,23 +130,24 @@ const WishBox = () => {
               min={1}
               placeholder="Donation amount (₴, optional)"
               style={{
-                width: '100%',
+                width: '92%',
                 borderRadius: 8,
                 border: `1.5px solid ${gold}`,
-                padding: '8px 10px',
+                padding: '10px 12px',
                 fontSize: '1rem',
-                marginBottom: 12
+                marginBottom: 16,
+                outline: 'none'
               }}
             />
             <button
               type="submit"
               style={{
-                width: '100%',
+                width: '92%',
                 background: gold,
                 color: white,
                 border: 'none',
                 borderRadius: 8,
-                padding: '10px 0',
+                padding: '12px 0',
                 fontWeight: 'bold',
                 fontSize: '1.08rem',
                 cursor: 'pointer',

@@ -16,15 +16,32 @@ export const UsersProvider = ({ children }) => {
         // If no users exist yet, create a default admin user
         if (parsedUsers.length === 0) {
           const defaultAdmin = {
-            _id: '1',
+            id: '1',
             username: 'admin',
-            password: 'admin123', // In a real app, this should be hashed
-            role: 'admin'
+            password: 'admin', // У реальному проекті паролі потрібно хешувати
+            role: 'admin',
+            createdAt: new Date().toISOString()
           };
           localStorage.setItem('users', JSON.stringify([defaultAdmin]));
           setUsers([defaultAdmin]);
         } else {
-          setUsers(parsedUsers);
+          // Перевіряємо чи існує адмін-користувач
+          const adminExists = parsedUsers.some(user => user.username === 'admin' && user.role === 'admin');
+          if (!adminExists) {
+            // Додаємо адміністратора, якщо його немає
+            const adminUser = {
+              id: Date.now().toString(),
+              username: 'admin',
+              password: 'admin',
+              role: 'admin',
+              createdAt: new Date().toISOString()
+            };
+            const updatedUsers = [...parsedUsers, adminUser];
+            localStorage.setItem('users', JSON.stringify(updatedUsers));
+            setUsers(updatedUsers);
+          } else {
+            setUsers(parsedUsers);
+          }
         }
       } catch (err) {
         console.error('Error loading users from localStorage:', err);
@@ -44,7 +61,7 @@ export const UsersProvider = ({ children }) => {
 
   // Get user by ID
   const getUserById = (id) => {
-    return users.find(user => user._id === id);
+    return users.find(user => user.id === id);
   };
 
   // Add new user
@@ -54,7 +71,8 @@ export const UsersProvider = ({ children }) => {
       const newId = Date.now().toString();
       const newUser = {
         ...userData,
-        _id: newId
+        id: newId,
+        createdAt: new Date().toISOString()
       };
 
       const updatedUsers = [...users, newUser];
@@ -71,7 +89,7 @@ export const UsersProvider = ({ children }) => {
   // Update user
   const updateUser = (id, userData) => {
     try {
-      const userIndex = users.findIndex(user => user._id === id);
+      const userIndex = users.findIndex(user => user.id === id);
 
       if (userIndex === -1) {
         return { success: false, error: 'User not found' };
@@ -81,11 +99,19 @@ export const UsersProvider = ({ children }) => {
       updatedUsers[userIndex] = {
         ...updatedUsers[userIndex],
         ...userData,
-        _id: id // Ensure the ID remains unchanged
+        id: id // Ensure the ID remains unchanged
       };
 
       localStorage.setItem('users', JSON.stringify(updatedUsers));
       setUsers(updatedUsers);
+
+      // Якщо оновлено поточного користувача, оновлюємо також його дані в localStorage
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      if (currentUser.id === id) {
+        const updatedCurrentUser = { ...updatedUsers[userIndex] };
+        delete updatedCurrentUser.password; // Видаляємо пароль
+        localStorage.setItem('currentUser', JSON.stringify(updatedCurrentUser));
+      }
 
       return { success: true, user: updatedUsers[userIndex] };
     } catch (err) {
@@ -97,15 +123,33 @@ export const UsersProvider = ({ children }) => {
   // Delete user
   const deleteUser = (id) => {
     try {
-      const userExists = users.some(user => user._id === id);
+      const userExists = users.some(user => user.id === id);
 
       if (!userExists) {
         return { success: false, error: 'User not found' };
       }
 
-      const updatedUsers = users.filter(user => user._id !== id);
+      // Перевіряємо чи користувач є адміністратором
+      const user = users.find(u => u.id === id);
+      if (user.role === 'admin') {
+        // Рахуємо кількість адміністраторів
+        const adminCount = users.filter(u => u.role === 'admin').length;
+
+        // Забороняємо видалення останнього адміністратора
+        if (adminCount <= 1) {
+          return { success: false, error: 'Cannot delete the only admin user' };
+        }
+      }
+
+      const updatedUsers = users.filter(user => user.id !== id);
       localStorage.setItem('users', JSON.stringify(updatedUsers));
       setUsers(updatedUsers);
+
+      // Якщо видалено поточного користувача, виходимо з системи
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      if (currentUser.id === id) {
+        localStorage.removeItem('currentUser');
+      }
 
       return { success: true };
     } catch (err) {

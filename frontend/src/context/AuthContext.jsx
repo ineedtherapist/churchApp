@@ -1,7 +1,32 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import axios from 'axios';
 
 const AuthContext = createContext();
+
+// Допоміжні функції для роботи з користувачами в localStorage
+const getUsers = () => {
+  const users = localStorage.getItem('users');
+  return users ? JSON.parse(users) : [];
+};
+
+const saveUsers = (users) => {
+  localStorage.setItem('users', JSON.stringify(users));
+};
+
+// Ініціалізація системи - створення адміністратора, якщо він ще не існує
+const initializeUsers = () => {
+  const users = getUsers();
+  if (users.length === 0) {
+    // Додаємо користувача admin з паролем admin та роллю admin
+    users.push({
+      id: '1',
+      username: 'admin',
+      password: 'admin', // У реальному проекті паролі потрібно хешувати
+      role: 'admin',
+      createdAt: new Date().toISOString()
+    });
+    saveUsers(users);
+  }
+};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -9,29 +34,28 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Load user from JWT token on initial render
+  // Ініціалізація системи при першому запуску
   useEffect(() => {
-    const loadUser = async () => {
+    initializeUsers();
+  }, []);
+
+  // Загрузка користувача з localStorage при початковому рендері
+  useEffect(() => {
+    const loadUser = () => {
       try {
-        const token = localStorage.getItem('token');
-        
-        if (!token) {
+        const savedUser = localStorage.getItem('currentUser');
+
+        if (!savedUser) {
           setLoading(false);
           return;
         }
 
-        // Set default headers for all axios requests
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        
-        // Get user data using token
-        const res = await axios.get('/api/users/profile/me');
-        
-        setUser(res.data);
+        const userData = JSON.parse(savedUser);
+        setUser(userData);
         setIsAuthenticated(true);
       } catch (err) {
-        console.error('Error loading user:', err.response?.data?.message || err.message);
-        localStorage.removeItem('token');
-        delete axios.defaults.headers.common['Authorization'];
+        console.error('Error loading user:', err.message);
+        localStorage.removeItem('currentUser');
       } finally {
         setLoading(false);
       }
@@ -40,59 +64,85 @@ export const AuthProvider = ({ children }) => {
     loadUser();
   }, []);
 
-  // Register user
-  const register = async (username, password) => {
+  // Реєстрація користувача
+  const register = (username, password) => {
     try {
       setError(null);
-      const res = await axios.post('/api/auth/register', { username, password });
-      
-      // Save token to localStorage
-      localStorage.setItem('token', res.data.token);
-      
-      // Set authorization header
-      axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
-      
-      // Set user and auth state
-      setUser(res.data);
+
+      // Перевіряємо чи користувач вже існує
+      const users = getUsers();
+      const existingUser = users.find(u => u.username === username);
+
+      if (existingUser) {
+        setError('Username already exists');
+        return false;
+      }
+
+      // Створюємо нового користувача
+      const newUser = {
+        id: Date.now().toString(),
+        username,
+        password, // У реальному проекті паролі потрібно хешувати
+        role: 'user',
+        createdAt: new Date().toISOString()
+      };
+
+      // Зберігаємо користувача в списку користувачів
+      users.push(newUser);
+      saveUsers(users);
+
+      // Зберігаємо поточного користувача
+      const currentUser = { ...newUser };
+      delete currentUser.password; // Видаляємо пароль з об'єкту поточного користувача
+
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+      // Встановлюємо стан користувача та автентифікації
+      setUser(currentUser);
       setIsAuthenticated(true);
       return true;
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
+      setError('Registration failed: ' + err.message);
       return false;
     }
   };
 
-  // Login user
-  const login = async (username, password) => {
+  // Вхід користувача
+  const login = (username, password) => {
     try {
       setError(null);
-      const res = await axios.post('/api/auth/login', { username, password });
-      
-      // Save token to localStorage
-      localStorage.setItem('token', res.data.token);
-      
-      // Set authorization header
-      axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
-      
-      // Set user and auth state
-      setUser(res.data);
+
+      // Знаходимо користувача у списку користувачів
+      const users = getUsers();
+      const foundUser = users.find(u => u.username === username && u.password === password);
+
+      if (!foundUser) {
+        setError('Invalid username or password');
+        return false;
+      }
+
+      // Зберігаємо поточного користувача
+      const currentUser = { ...foundUser };
+      delete currentUser.password; // Видаляємо пароль з об'єкту поточного користувача
+
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+      // Встановлюємо стан користувача та автентифікації
+      setUser(currentUser);
       setIsAuthenticated(true);
       return true;
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid credentials');
+      setError('Login failed: ' + err.message);
       return false;
     }
   };
 
-  // Logout user
+  // Вихід користувача
   const logout = () => {
-    // Remove token from localStorage
-    localStorage.removeItem('token');
-    
-    // Remove authorization header
-    delete axios.defaults.headers.common['Authorization'];
-    
-    // Reset state
+    // Видаляємо поточного користувача з localStorage
+    localStorage.removeItem('currentUser');
+
+    // Скидаємо стан
     setUser(null);
     setIsAuthenticated(false);
   };
@@ -115,4 +165,3 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
-
