@@ -11,12 +11,44 @@ import {
 
 // Service category colors
 const categoryColors = {
-  prayer: '#3a86ff', // blue for prayer services
-  sacrament: '#8a4fff', // purple for sacraments
-  ceremony: '#ff8a4f', // orange for ceremonies
-  counseling: '#4fff8a', // green for counseling
-  reservation: '#ff4f8a' // pink for reservations
+  prayer: darkGold,     // використовуємо darkGold замість синього
+  sacrament: gold,      // використовуємо gold замість фіолетового
+  ceremony: darkGold,   // використовуємо darkGold замість оранжевого
+  counseling: gold,     // використовуємо gold замість зеленого
+  reservation: darkGold // використовуємо darkGold замість рожевого
 };
+
+// Helper functions for styling
+const standardPriceDisplay = () => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '6px',
+  padding: '8px 12px',
+  borderRadius: '12px',
+  background: '#f8f8f8',
+});
+
+const standardPriceText = (price, color) => ({
+  fontWeight: 'bold',
+  fontSize: '18px',
+  color: typeof color === 'string' ? color : darkGold,
+});
+
+const standardPaymentButton = (color) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '8px',
+  backgroundColor: typeof color === 'string' ? color : darkGold,
+  color: white,
+  border: 'none',
+  padding: '10px 20px',
+  borderRadius: '10px',
+  fontSize: '16px',
+  fontWeight: '600',
+  cursor: 'pointer',
+  transition: 'all 0.2s ease',
+  boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+});
 
 // Base component for modal window
 const Modal = ({ isOpen, onClose, title, icon, children, accentColor = gold }) => {
@@ -176,7 +208,7 @@ const SuccessModal = ({ isOpen, message, subMessage, icon = "✅", countdown }) 
         <h3 style={{ fontSize: '22px', color: darkGold, marginBottom: '8px' }}>{message}</h3>
         <p style={{ color: '#666', marginBottom: '12px' }}>{subMessage}</p>
         {countdown !== undefined && (
-          <div style={{ color: hoverPurple, fontWeight: '500', marginTop: '12px' }}>
+          <div style={{ color: darkGold, fontWeight: '500', marginTop: '12px' }}>
             Closing in {countdown} second{countdown !== 1 ? 's' : ''}
           </div>
         )}
@@ -466,52 +498,83 @@ function BenchReservationModal({ onPaid, onClose }) {
 
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-        <label style={{ ...modalStyles.label }}>Name for reservation</label>
-        <input
-          type="text"
-          placeholder="Enter your name"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          style={modalStyles.input}
-        />
-        <label style={{ ...modalStyles.label }}>Date</label>
-        <input
-          type="date"
-          value={date}
-          onChange={e => setDate(e.target.value)}
-          style={modalStyles.input}
-        />
-        <label style={{ ...modalStyles.label }}>Time</label>
-        <input
-          type="time"
-          value={time}
-          onChange={e => setTime(e.target.value)}
-          style={modalStyles.input}
-        />
-        <label style={{ ...modalStyles.label }}>Available benches</label>
-        <select
-          value={selectedBench}
-          onChange={e => setSelectedBench(e.target.value)}
-          style={{
-            ...modalStyles.input,
-            padding: '10px 12px',
-            appearance: 'none',
-            background: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${encodeURIComponent(gold)}"><path d="M7 10l5 5 5-5H7z"/></svg>') no-repeat right 10px center`
-          }}
-        >
-          <option value="">Select a bench</option>
-          {availableBenches.map(b => (
-            <option key={b} value={b}>{b}</option>
-          ))}
-        </select>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={{ marginBottom: '10px' }}>
+          <label style={{ ...modalStyles.label }}>Name for reservation</label>
+          <input
+            type="text"
+            placeholder="Enter your name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            style={modalStyles.input}
+          />
+        </div>
+
+        <div style={{ marginBottom: '10px' }}>
+          <label style={{ ...modalStyles.label }}>Date</label>
+          <input
+            type="date"
+            value={date}
+            onChange={e => setDate(e.target.value)}
+            style={modalStyles.input}
+          />
+        </div>
+
+        <div style={{ marginBottom: '10px' }}>
+          <label style={{ ...modalStyles.label }}>Time</label>
+          <input
+            type="time"
+            value={time}
+            onChange={e => setTime(e.target.value)}
+            style={modalStyles.input}
+          />
+        </div>
+
+        <div style={{ marginBottom: '10px' }}>
+          <label style={{ ...modalStyles.label }}>Available benches</label>
+          <select
+            value={selectedBench}
+            onChange={e => setSelectedBench(e.target.value)}
+            style={{
+              ...modalStyles.input,
+              padding: '10px 12px',
+              appearance: 'none',
+              background: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${encodeURIComponent(gold)}"><path d="M7 10l5 5 5-5H7z"/></svg>') no-repeat right 10px center`
+            }}
+          >
+            <option value="">Select a bench</option>
+            {availableBenches.map(b => (
+              <option key={b} value={b}>{b}</option>
+            ))}
+          </select>
+        </div>
+
         {error && <div style={modalStyles.error}>{error}</div>}
-        <button
-          style={modalStyles.button}
-          onClick={handleReserve}
-        >
-          Reserve (200 UAH)
-        </button>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+          <div style={standardPriceDisplay()}>
+            <span style={{ fontSize: '22px' }}>💰</span>
+            <span style={standardPriceText(200, categoryColors.reservation)}>200 UAH</span>
+          </div>
+
+          <button
+            onClick={handleReserve}
+            style={standardPaymentButton(categoryColors.reservation)}
+            onMouseOver={e => {
+              e.currentTarget.style.opacity = '0.9';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 6px 8px rgba(0,0,0,0.15)';
+            }}
+            onMouseOut={e => {
+              e.currentTarget.style.opacity = '1';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+            }}
+          >
+            <span>Pay</span>
+            <span>→</span>
+          </button>
+        </div>
       </div>
     </>
   );
@@ -533,36 +596,61 @@ function LightCandleModal({ onPaid }) {
 
   return (
     <>
-      <div style={modalStyles.formContainer}>
-        <label style={modalStyles.label}>Name</label>
-        <input
-          type="text"
-          placeholder="Enter name"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          style={modalStyles.input}
-        />
-        <label style={modalStyles.label}>Intention</label>
-        <select
-          value={intention}
-          onChange={e => setIntention(e.target.value)}
-          style={{
-            ...modalStyles.input,
-            padding: '10px 12px',
-            appearance: 'none',
-            background: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${encodeURIComponent(gold)}"><path d="M7 10l5 5 5-5H7z"/></svg>') no-repeat right 10px center`
-          }}
-        >
-          <option>For health</option>
-          <option>For repose</option>
-        </select>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={{ marginBottom: '10px' }}>
+          <label style={modalStyles.label}>Name</label>
+          <input
+            type="text"
+            placeholder="Enter name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            style={modalStyles.input}
+          />
+        </div>
+
+        <div style={{ marginBottom: '10px' }}>
+          <label style={modalStyles.label}>Intention</label>
+          <select
+            value={intention}
+            onChange={e => setIntention(e.target.value)}
+            style={{
+              ...modalStyles.input,
+              padding: '10px 12px',
+              appearance: 'none',
+              background: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${encodeURIComponent(gold)}"><path d="M7 10l5 5 5-5H7z"/></svg>') no-repeat right 10px center`
+            }}
+          >
+            <option>For health</option>
+            <option>For repose</option>
+          </select>
+        </div>
+
         {error && <div style={modalStyles.error}>{error}</div>}
-        <button
-          style={modalStyles.button}
-          onClick={handlePay}
-        >
-          Pay (50 UAH)
-        </button>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+          <div style={standardPriceDisplay()}>
+            <span style={{ fontSize: '22px' }}>💰</span>
+            <span style={standardPriceText(50, categoryColors.prayer)}>50 UAH</span>
+          </div>
+
+          <button
+            onClick={handlePay}
+            style={standardPaymentButton(categoryColors.prayer)}
+            onMouseOver={e => {
+              e.currentTarget.style.opacity = '0.9';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 6px 8px rgba(0,0,0,0.15)';
+            }}
+            onMouseOut={e => {
+              e.currentTarget.style.opacity = '1';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+            }}
+          >
+            <span>Pay</span>
+            <span>→</span>
+          </button>
+        </div>
       </div>
     </>
   );
@@ -584,41 +672,66 @@ function PrayerListModal({ onPaid }) {
 
   return (
     <>
-      <div style={modalStyles.formContainer}>
-        <label style={modalStyles.label}>Names (comma separated)</label>
-        <textarea
-          placeholder="Enter names"
-          rows={3}
-          value={names}
-          onChange={e => setNames(e.target.value)}
-          style={{
-            ...modalStyles.input,
-            resize: 'vertical',
-            height: 'auto',
-            minHeight: '60px'
-          }}
-        />
-        <label style={modalStyles.label}>Intention</label>
-        <select
-          value={intention}
-          onChange={e => setIntention(e.target.value)}
-          style={{
-            ...modalStyles.input,
-            padding: '10px 12px',
-            appearance: 'none',
-            background: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${encodeURIComponent(gold)}"><path d="M7 10l5 5 5-5H7z"/></svg>') no-repeat right 10px center`
-          }}
-        >
-          <option>For health</option>
-          <option>For repose</option>
-        </select>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={{ marginBottom: '10px' }}>
+          <label style={modalStyles.label}>Names (comma separated)</label>
+          <textarea
+            placeholder="Enter names"
+            rows={3}
+            value={names}
+            onChange={e => setNames(e.target.value)}
+            style={{
+              ...modalStyles.input,
+              resize: 'vertical',
+              height: 'auto',
+              minHeight: '60px'
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: '10px' }}>
+          <label style={modalStyles.label}>Intention</label>
+          <select
+            value={intention}
+            onChange={e => setIntention(e.target.value)}
+            style={{
+              ...modalStyles.input,
+              padding: '10px 12px',
+              appearance: 'none',
+              background: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${encodeURIComponent(gold)}"><path d="M7 10l5 5 5-5H7z"/></svg>') no-repeat right 10px center`
+            }}
+          >
+            <option>For health</option>
+            <option>For repose</option>
+          </select>
+        </div>
+
         {error && <div style={modalStyles.error}>{error}</div>}
-        <button
-          style={modalStyles.button}
-          onClick={handlePay}
-        >
-          Pay (100 UAH)
-        </button>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+          <div style={standardPriceDisplay()}>
+            <span style={{ fontSize: '22px' }}>💰</span>
+            <span style={standardPriceText(100, categoryColors.prayer)}>100 UAH</span>
+          </div>
+
+          <button
+            onClick={handlePay}
+            style={standardPaymentButton(categoryColors.prayer)}
+            onMouseOver={e => {
+              e.currentTarget.style.opacity = '0.9';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 6px 8px rgba(0,0,0,0.15)';
+            }}
+            onMouseOut={e => {
+              e.currentTarget.style.opacity = '1';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+            }}
+          >
+            <span>Pay</span>
+            <span>→</span>
+          </button>
+        </div>
       </div>
     </>
   );
@@ -646,24 +759,30 @@ function BaptismReservationModal({ onPaid }) {
 
   return (
     <>
-      <div style={modalStyles.formContainer}>
-        <label style={modalStyles.label}>Child's Name</label>
-        <input
-          type="text"
-          placeholder="Enter child's name"
-          value={childName}
-          onChange={e => setChildName(e.target.value)}
-          style={modalStyles.input}
-        />
-        <label style={modalStyles.label}>Parent's Name</label>
-        <input
-          type="text"
-          placeholder="Enter parent's name"
-          value={parentName}
-          onChange={e => setParentName(e.target.value)}
-          style={modalStyles.input}
-        />
-        <div style={{ display: 'flex', gap: '15px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={{ marginBottom: '10px' }}>
+          <label style={modalStyles.label}>Child's Name</label>
+          <input
+            type="text"
+            placeholder="Enter child's name"
+            value={childName}
+            onChange={e => setChildName(e.target.value)}
+            style={modalStyles.input}
+          />
+        </div>
+
+        <div style={{ marginBottom: '10px' }}>
+          <label style={modalStyles.label}>Parent's Name</label>
+          <input
+            type="text"
+            placeholder="Enter parent's name"
+            value={parentName}
+            onChange={e => setParentName(e.target.value)}
+            style={modalStyles.input}
+          />
+        </div>
+
+        <div style={{ display: 'flex', gap: '15px', marginBottom: '10px' }}>
           <div style={{ flex: 1 }}>
             <label style={modalStyles.label}>Preferred Date</label>
             <input
@@ -684,13 +803,33 @@ function BaptismReservationModal({ onPaid }) {
             />
           </div>
         </div>
+
         {error && <div style={modalStyles.error}>{error}</div>}
-        <button
-          style={modalStyles.button}
-          onClick={handleReserve}
-        >
-          Reserve (500 UAH)
-        </button>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+          <div style={standardPriceDisplay()}>
+            <span style={{ fontSize: '22px' }}>💰</span>
+            <span style={standardPriceText(500, categoryColors.sacrament)}>500 UAH</span>
+          </div>
+
+          <button
+            onClick={handleReserve}
+            style={standardPaymentButton(categoryColors.sacrament)}
+            onMouseOver={e => {
+              e.currentTarget.style.opacity = '0.9';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 6px 8px rgba(0,0,0,0.15)';
+            }}
+            onMouseOut={e => {
+              e.currentTarget.style.opacity = '1';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+            }}
+          >
+            <span>Pay</span>
+            <span>→</span>
+          </button>
+        </div>
       </div>
     </>
   );
@@ -714,44 +853,64 @@ function HomeBlessingModal({ onPaid }) {
 
   return (
     <>
-      <div style={modalStyles.formContainer}>
-        <label style={modalStyles.label}>Your Name</label>
-        <input
-          type="text"
-          placeholder="Enter your name"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          style={modalStyles.input}
-        />
-        <label style={modalStyles.label}>Address</label>
-        <input
-          type="text"
-          placeholder="Enter address"
-          value={address}
-          onChange={e => setAddress(e.target.value)}
-          style={modalStyles.input}
-        />
-        <label style={modalStyles.label}>Preferred Date</label>
-        <input
-          type="date"
-          value={date}
-          onChange={e => setDate(e.target.value)}
-          style={modalStyles.input}
-        />
-        <label style={modalStyles.label}>Preferred Time</label>
-        <input
-          type="time"
-          value={time}
-          onChange={e => setTime(e.target.value)}
-          style={modalStyles.input}
-        />
-        {error && <div style={modalStyles.error}>{error}</div>}
-        <button
-          style={modalStyles.button}
-          onClick={handlePay}
-        >
-          Pay (400 UAH)
-        </button>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={modalStyles.formContainer}>
+          <label style={modalStyles.label}>Your Name</label>
+          <input
+            type="text"
+            placeholder="Enter your name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            style={modalStyles.input}
+          />
+          <label style={modalStyles.label}>Address</label>
+          <input
+            type="text"
+            placeholder="Enter address"
+            value={address}
+            onChange={e => setAddress(e.target.value)}
+            style={modalStyles.input}
+          />
+          <label style={modalStyles.label}>Preferred Date</label>
+          <input
+            type="date"
+            value={date}
+            onChange={e => setDate(e.target.value)}
+            style={modalStyles.input}
+          />
+          <label style={modalStyles.label}>Preferred Time</label>
+          <input
+            type="time"
+            value={time}
+            onChange={e => setTime(e.target.value)}
+            style={modalStyles.input}
+          />
+          {error && <div style={modalStyles.error}>{error}</div>}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+            <div style={standardPriceDisplay()}>
+              <span style={{ fontSize: '22px' }}>💰</span>
+              <span style={standardPriceText(400, categoryColors.ceremony)}>400 UAH</span>
+            </div>
+            
+            <button
+              onClick={handlePay}
+              style={standardPaymentButton(categoryColors.ceremony)}
+              onMouseOver={e => {
+                e.currentTarget.style.opacity = '0.9';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 6px 8px rgba(0,0,0,0.15)';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.opacity = '1';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+              }}
+            >
+              <span>Pay</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );
@@ -774,36 +933,56 @@ function ConfessionModal({ onPaid }) {
 
   return (
     <>
-      <div style={modalStyles.formContainer}>
-        <label style={modalStyles.label}>Your Name</label>
-        <input
-          type="text"
-          placeholder="Enter your name"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          style={modalStyles.input}
-        />
-        <label style={modalStyles.label}>Preferred Date</label>
-        <input
-          type="date"
-          value={date}
-          onChange={e => setDate(e.target.value)}
-          style={modalStyles.input}
-        />
-        <label style={modalStyles.label}>Preferred Time</label>
-        <input
-          type="time"
-          value={time}
-          onChange={e => setTime(e.target.value)}
-          style={modalStyles.input}
-        />
-        {error && <div style={modalStyles.error}>{error}</div>}
-        <button
-          style={modalStyles.button}
-          onClick={handlePay}
-        >
-          Pay (150 UAH)
-        </button>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={modalStyles.formContainer}>
+          <label style={modalStyles.label}>Your Name</label>
+          <input
+            type="text"
+            placeholder="Enter your name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            style={modalStyles.input}
+          />
+          <label style={modalStyles.label}>Preferred Date</label>
+          <input
+            type="date"
+            value={date}
+            onChange={e => setDate(e.target.value)}
+            style={modalStyles.input}
+          />
+          <label style={modalStyles.label}>Preferred Time</label>
+          <input
+            type="time"
+            value={time}
+            onChange={e => setTime(e.target.value)}
+            style={modalStyles.input}
+          />
+          {error && <div style={modalStyles.error}>{error}</div>}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+            <div style={standardPriceDisplay()}>
+              <span style={{ fontSize: '22px' }}>💰</span>
+              <span style={standardPriceText(150, categoryColors.sacrament)}>150 UAH</span>
+            </div>
+            
+            <button
+              onClick={handlePay}
+              style={standardPaymentButton(categoryColors.sacrament)}
+              onMouseOver={e => {
+                e.currentTarget.style.opacity = '0.9';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 6px 8px rgba(0,0,0,0.15)';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.opacity = '1';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+              }}
+            >
+              <span>Pay</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );
@@ -826,36 +1005,56 @@ function MemorialServiceModal({ onPaid }) {
 
   return (
     <>
-      <div style={modalStyles.formContainer}>
-        <label style={modalStyles.label}>Name for Memorial</label>
-        <input
-          type="text"
-          placeholder="Enter name"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          style={modalStyles.input}
-        />
-        <label style={modalStyles.label}>Preferred Date</label>
-        <input
-          type="date"
-          value={date}
-          onChange={e => setDate(e.target.value)}
-          style={modalStyles.input}
-        />
-        <label style={modalStyles.label}>Preferred Time</label>
-        <input
-          type="time"
-          value={time}
-          onChange={e => setTime(e.target.value)}
-          style={modalStyles.input}
-        />
-        {error && <div style={modalStyles.error}>{error}</div>}
-        <button
-          style={modalStyles.button}
-          onClick={handlePay}
-        >
-          Pay (300 UAH)
-        </button>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={modalStyles.formContainer}>
+          <label style={modalStyles.label}>Name for Memorial</label>
+          <input
+            type="text"
+            placeholder="Enter name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            style={modalStyles.input}
+          />
+          <label style={modalStyles.label}>Preferred Date</label>
+          <input
+            type="date"
+            value={date}
+            onChange={e => setDate(e.target.value)}
+            style={modalStyles.input}
+          />
+          <label style={modalStyles.label}>Preferred Time</label>
+          <input
+            type="time"
+            value={time}
+            onChange={e => setTime(e.target.value)}
+            style={modalStyles.input}
+          />
+          {error && <div style={modalStyles.error}>{error}</div>}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+            <div style={standardPriceDisplay()}>
+              <span style={{ fontSize: '22px' }}>💰</span>
+              <span style={standardPriceText(300, categoryColors.ceremony)}>300 UAH</span>
+            </div>
+            
+            <button
+              onClick={handlePay}
+              style={standardPaymentButton(categoryColors.ceremony)}
+              onMouseOver={e => {
+                e.currentTarget.style.opacity = '0.9';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 6px 8px rgba(0,0,0,0.15)';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.opacity = '1';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+              }}
+            >
+              <span>Pay</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );
@@ -878,36 +1077,56 @@ function WeddingReservationModal({ onPaid }) {
 
   return (
     <>
-      <div style={modalStyles.formContainer}>
-        <label style={modalStyles.label}>Names of Couple</label>
-        <input
-          type="text"
-          placeholder="Enter names"
-          value={names}
-          onChange={e => setNames(e.target.value)}
-          style={modalStyles.input}
-        />
-        <label style={modalStyles.label}>Preferred Date</label>
-        <input
-          type="date"
-          value={date}
-          onChange={e => setDate(e.target.value)}
-          style={modalStyles.input}
-        />
-        <label style={modalStyles.label}>Preferred Time</label>
-        <input
-          type="time"
-          value={time}
-          onChange={e => setTime(e.target.value)}
-          style={modalStyles.input}
-        />
-        {error && <div style={modalStyles.error}>{error}</div>}
-        <button
-          style={modalStyles.button}
-          onClick={handlePay}
-        >
-          Pay (700 UAH)
-        </button>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={modalStyles.formContainer}>
+          <label style={modalStyles.label}>Names of Couple</label>
+          <input
+            type="text"
+            placeholder="Enter names"
+            value={names}
+            onChange={e => setNames(e.target.value)}
+            style={modalStyles.input}
+          />
+          <label style={modalStyles.label}>Preferred Date</label>
+          <input
+            type="date"
+            value={date}
+            onChange={e => setDate(e.target.value)}
+            style={modalStyles.input}
+          />
+          <label style={modalStyles.label}>Preferred Time</label>
+          <input
+            type="time"
+            value={time}
+            onChange={e => setTime(e.target.value)}
+            style={modalStyles.input}
+          />
+          {error && <div style={modalStyles.error}>{error}</div>}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+            <div style={standardPriceDisplay()}>
+              <span style={{ fontSize: '22px' }}>💰</span>
+              <span style={standardPriceText(700, categoryColors.sacrament)}>700 UAH</span>
+            </div>
+            
+            <button
+              onClick={handlePay}
+              style={standardPaymentButton(categoryColors.sacrament)}
+              onMouseOver={e => {
+                e.currentTarget.style.opacity = '0.9';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 6px 8px rgba(0,0,0,0.15)';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.opacity = '1';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+              }}
+            >
+              <span>Pay</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );
@@ -930,36 +1149,56 @@ function SpiritualCounselingModal({ onPaid }) {
 
   return (
     <>
-      <div style={modalStyles.formContainer}>
-        <label style={modalStyles.label}>Your Name</label>
-        <input
-          type="text"
-          placeholder="Enter your name"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          style={modalStyles.input}
-        />
-        <label style={modalStyles.label}>Preferred Date</label>
-        <input
-          type="date"
-          value={date}
-          onChange={e => setDate(e.target.value)}
-          style={modalStyles.input}
-        />
-        <label style={modalStyles.label}>Preferred Time</label>
-        <input
-          type="time"
-          value={time}
-          onChange={e => setTime(e.target.value)}
-          style={modalStyles.input}
-        />
-        {error && <div style={modalStyles.error}>{error}</div>}
-        <button
-          style={modalStyles.button}
-          onClick={handlePay}
-        >
-          Pay (250 UAH)
-        </button>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={modalStyles.formContainer}>
+          <label style={modalStyles.label}>Your Name</label>
+          <input
+            type="text"
+            placeholder="Enter your name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            style={modalStyles.input}
+          />
+          <label style={modalStyles.label}>Preferred Date</label>
+          <input
+            type="date"
+            value={date}
+            onChange={e => setDate(e.target.value)}
+            style={modalStyles.input}
+          />
+          <label style={modalStyles.label}>Preferred Time</label>
+          <input
+            type="time"
+            value={time}
+            onChange={e => setTime(e.target.value)}
+            style={modalStyles.input}
+          />
+          {error && <div style={modalStyles.error}>{error}</div>}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+            <div style={standardPriceDisplay()}>
+              <span style={{ fontSize: '22px' }}>💰</span>
+              <span style={standardPriceText(250, categoryColors.counseling)}>250 UAH</span>
+            </div>
+            
+            <button
+              onClick={handlePay}
+              style={standardPaymentButton(categoryColors.counseling)}
+              onMouseOver={e => {
+                e.currentTarget.style.opacity = '0.9';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 6px 8px rgba(0,0,0,0.15)';
+              }}
+              onMouseOut={e => {
+                e.currentTarget.style.opacity = '1';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+              }}
+            >
+              <span>Pay</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );
@@ -1002,35 +1241,21 @@ const NewLightCandleModal = ({ onClose, onPaid }) => {
       />
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+        <div style={standardPriceDisplay()}>
           <span style={{ fontSize: '22px' }}>💰</span>
-          <span style={{ fontSize: '18px', fontWeight: '600', color: hoverPurple }}>50 UAH</span>
+          <span style={standardPriceText(50, categoryColors.prayer)}>50 UAH</span>
         </div>
 
         <button
           onClick={handlePay}
-          style={{
-            backgroundColor: gold,
-            color: 'white',
-            border: 'none',
-            borderRadius: '10px',
-            padding: '12px 24px',
-            fontSize: '16px',
-            fontWeight: '600',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-            transition: 'all 0.2s ease'
-          }}
+          style={standardPaymentButton(categoryColors.prayer)}
           onMouseOver={e => {
-            e.currentTarget.style.backgroundColor = darkGold;
+            e.currentTarget.style.opacity = '0.9';
             e.currentTarget.style.transform = 'translateY(-2px)';
             e.currentTarget.style.boxShadow = '0 6px 8px rgba(0,0,0,0.15)';
           }}
           onMouseOut={e => {
-            e.currentTarget.style.backgroundColor = gold;
+            e.currentTarget.style.opacity = '1';
             e.currentTarget.style.transform = 'translateY(0)';
             e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
           }}
@@ -1078,35 +1303,21 @@ const NewPrayerListModal = ({ onClose, onPaid }) => {
       />
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+        <div style={standardPriceDisplay()}>
           <span style={{ fontSize: '22px' }}>💰</span>
-          <span style={{ fontSize: '18px', fontWeight: '600', color: hoverPurple }}>100 UAH</span>
+          <span style={standardPriceText(100, categoryColors.prayer)}>100 UAH</span>
         </div>
 
         <button
           onClick={handlePay}
-          style={{
-            backgroundColor: gold,
-            color: 'white',
-            border: 'none',
-            borderRadius: '10px',
-            padding: '12px 24px',
-            fontSize: '16px',
-            fontWeight: '600',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-            transition: 'all 0.2s ease'
-          }}
+          style={standardPaymentButton(categoryColors.prayer)}
           onMouseOver={e => {
-            e.currentTarget.style.backgroundColor = darkGold;
+            e.currentTarget.style.opacity = '0.9';
             e.currentTarget.style.transform = 'translateY(-2px)';
             e.currentTarget.style.boxShadow = '0 6px 8px rgba(0,0,0,0.15)';
           }}
           onMouseOut={e => {
-            e.currentTarget.style.backgroundColor = gold;
+            e.currentTarget.style.opacity = '1';
             e.currentTarget.style.transform = 'translateY(0)';
             e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
           }}
@@ -1183,28 +1394,14 @@ const NewBaptismReservationModal = ({ onClose, onPaid }) => {
       </div>}
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+        <div style={standardPriceDisplay()}>
           <span style={{ fontSize: '22px' }}>💰</span>
-          <span style={{ fontSize: '18px', fontWeight: '600', color: categoryColors.sacrament }}>500 UAH</span>
+          <span style={standardPriceText(500, categoryColors.sacrament)}>500 UAH</span>
         </div>
-
+        
         <button
           onClick={handleReserve}
-          style={{
-            backgroundColor: categoryColors.sacrament,
-            color: 'white',
-            border: 'none',
-            borderRadius: '10px',
-            padding: '12px 24px',
-            fontSize: '16px',
-            fontWeight: '600',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-            transition: 'all 0.2s ease'
-          }}
+          style={standardPaymentButton(categoryColors.sacrament)}
           onMouseOver={e => {
             e.currentTarget.style.opacity = '0.9';
             e.currentTarget.style.transform = 'translateY(-2px)';
@@ -1216,13 +1413,13 @@ const NewBaptismReservationModal = ({ onClose, onPaid }) => {
             e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
           }}
         >
-          <span>Reserve</span>
+          <span>Pay</span>
           <span>→</span>
         </button>
       </div>
     </div>
   );
-};
+}
 
 // Updated service data with categories and colors
 const serviceData = [
@@ -1678,7 +1875,7 @@ const Services = () => {
 };
 
 // --- Modal styles ---
-const modalStyle = {
+const modalOverlayStyle = {
   position: 'fixed',
   top: 0, left: 0, right: 0, bottom: 0,
   background: 'rgba(0,0,0,0.18)',
