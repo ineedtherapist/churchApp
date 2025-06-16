@@ -20,9 +20,13 @@ const Login = () => {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated && user) {
+      console.log('User authenticated:', user);
       if (user?.role === 'admin') {
-        navigate('/admin');
+        console.log('Admin user detected in Login, redirecting to /admin');
+        // Force a hard navigation to avoid React Router issues
+        window.location.href = '/admin';
       } else {
+        console.log('Regular user, redirecting to home');
         navigate('/');
       }
     }

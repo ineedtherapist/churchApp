@@ -1,4 +1,3 @@
-// filepath: c:\Users\Lenovo\Desktop\test\churchApp\frontend\src\components\Services.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import Header from './Header.jsx';
 import WishBox from './WishBox.jsx';

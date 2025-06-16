@@ -68,9 +68,10 @@ export const headerNavBtn = {
   padding: '7px 14px',
   borderRadius: 6,
   border: 'none',
-  transition: 'background 0.2s, color 0.2s, border 0.2s',
+  transition: 'background 0.2s, color 0.2s, border 0.2s, transform 0.2s ease',
   display: 'flex',
-  alignItems: 'center'
+  alignItems: 'center',
+  cursor: 'pointer'
 };
 
 export const headerNavBtnLogout = {
@@ -83,7 +84,7 @@ export const headerNavBtnLogout = {
   borderRadius: 6,
   border: 'none',
   cursor: 'pointer',
-  transition: 'background 0.2s, color 0.2s, border 0.2s',
+  transition: 'background 0.2s, color 0.2s, border 0.2s, transform 0.2s ease',
   display: 'flex',
   alignItems: 'center'
 };
@@ -157,4 +158,3 @@ export const adminDangerButton = {
     background: '#c00424',
   },
 };
-

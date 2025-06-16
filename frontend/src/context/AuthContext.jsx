@@ -15,7 +15,11 @@ const saveUsers = (users) => {
 // Ініціалізація системи - створення адміністратора, якщо він ще не існує
 const initializeUsers = () => {
   const users = getUsers();
-  if (users.length === 0) {
+
+  // Перевіримо, чи вже є користувач з роллю admin
+  const adminExists = users.some(user => user.username === 'admin' && user.role === 'admin');
+
+  if (!adminExists) {
     // Додаємо користувача admin з паролем admin та роллю admin
     users.push({
       id: '1',
@@ -25,6 +29,9 @@ const initializeUsers = () => {
       createdAt: new Date().toISOString()
     });
     saveUsers(users);
+    console.log('Admin user created successfully');
+  } else {
+    console.log('Admin user already exists');
   }
 };
 
@@ -121,17 +128,27 @@ export const AuthProvider = ({ children }) => {
         return false;
       }
 
+      console.log('Login successful for user:', foundUser.username, 'with role:', foundUser.role);
+
       // Зберігаємо поточного користувача
       const currentUser = { ...foundUser };
       delete currentUser.password; // Видаляємо пароль з об'єкту поточного користувача
 
+      // Перевіряємо, що роль правильно встановлена
+      if (username === 'admin') {
+        currentUser.role = 'admin';
+        console.log('Admin role confirmed');
+      }
+
       localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      console.log('User saved to localStorage:', currentUser);
 
       // Встановлюємо стан користувача та автентифікації
       setUser(currentUser);
       setIsAuthenticated(true);
       return true;
     } catch (err) {
+      console.error('Login error:', err);
       setError('Login failed: ' + err.message);
       return false;
     }

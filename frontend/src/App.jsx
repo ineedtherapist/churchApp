@@ -76,8 +76,9 @@ function ProtectedRoute({ children }) {
         return <Navigate to="/login" replace />;
     }
 
-    // Redirect admin users to the admin panel
-    if (user?.role === 'admin') {
+    // Для адміністратора завжди перенаправляємо на адмінпанель з головної сторінки
+    if (user?.role === 'admin' && window.location.pathname === '/') {
+        console.log('Admin user detected, redirecting to admin panel');
         return <Navigate to="/admin" replace />;
     }
 
@@ -100,4 +101,3 @@ function AdminRoute({ children }) {
 }
 
 export default App;
-

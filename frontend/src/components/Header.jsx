@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import {
-    gold,
     white,
     hoverPurple,
     darkGold,
@@ -46,11 +45,13 @@ const Header = () => {
                         e.currentTarget.style.background = hoverPurple;
                         e.currentTarget.style.color = white;
                         e.currentTarget.style.border = 'none';
+                        e.currentTarget.style.transform = 'scale(1.05)';
                     }}
                     onMouseOut={e => {
                         e.currentTarget.style.background = white;
                         e.currentTarget.style.color = darkGold;
                         e.currentTarget.style.border = 'none';
+                        e.currentTarget.style.transform = 'scale(1)';
                     }}
                 >
                     <span role="img" aria-label="shop" style={{ marginRight: 6, background: 'none', transition: 'color 0.2s' }}>🛒</span>
@@ -63,11 +64,13 @@ const Header = () => {
                         e.currentTarget.style.background = hoverPurple;
                         e.currentTarget.style.color = white;
                         e.currentTarget.style.border = 'none';
+                        e.currentTarget.style.transform = 'scale(1.05)';
                     }}
                     onMouseOut={e => {
                         e.currentTarget.style.background = white;
                         e.currentTarget.style.color = darkGold;
                         e.currentTarget.style.border = 'none';
+                        e.currentTarget.style.transform = 'scale(1)';
                     }}
                 >
                     <span role="img" aria-label="calendar" style={{ marginRight: 6, background: 'none', transition: 'color 0.2s' }}>📅</span>
@@ -80,11 +83,13 @@ const Header = () => {
                         e.currentTarget.style.background = hoverPurple;
                         e.currentTarget.style.color = white;
                         e.currentTarget.style.border = 'none';
+                        e.currentTarget.style.transform = 'scale(1.05)';
                     }}
                     onMouseOut={e => {
                         e.currentTarget.style.background = white;
                         e.currentTarget.style.color = darkGold;
                         e.currentTarget.style.border = 'none';
+                        e.currentTarget.style.transform = 'scale(1)';
                     }}
                 >
                     <span role="img" aria-label="services" style={{ marginRight: 6, background: 'none', transition: 'color 0.2s' }}>🛐</span>
@@ -97,11 +102,13 @@ const Header = () => {
                         e.currentTarget.style.background = '#c3001b';
                         e.currentTarget.style.color = white;
                         e.currentTarget.style.border = 'none';
+                        e.currentTarget.style.transform = 'scale(1.05)';
                     }}
                     onMouseOut={e => {
                         e.currentTarget.style.background = '#ef233c';
                         e.currentTarget.style.color = white;
                         e.currentTarget.style.border = 'none';
+                        e.currentTarget.style.transform = 'scale(1)';
                     }}
                 >
                     Logout
